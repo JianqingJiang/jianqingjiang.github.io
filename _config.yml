@@ -1,4 +1,4 @@
-title:            JIANQINGJIANG'S BOLG
+title:            蒋暕青's Bolg
 description:      The Load To Tech
 # put your disqus here
 disqus_shortname: 
@@ -18,7 +18,7 @@ url: http://jianqingjiang.github.io
 menu:
   - title: 'Home'
     url: '/'
-  - title: 'GitHub'
+  - title: 'Git'
     url: 'https://github.com/JianqingJiang'
   - title: 'Install'
     url: '/theme-setup/'
