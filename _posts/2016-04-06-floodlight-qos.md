@@ -62,7 +62,7 @@ categories: [SDN]
 
 ###   1.3、实验环境搭建  
 为了验证网络流量控制的性能，搭建了一个简单的DiffServ的小型网络，如图所示：  
- ![实验拓扑图](/image/floodlight-qos/1.png)  
+ ![实验拓扑图](/images/floodlight-qos/1.png)  
 
 
 其中OpenFlow控制器为运行Floodlight控制器程序的Linux(Ubuntu)主机，Floodlight和OVS为运行OpenFlow网络的控制器和交换机。OVS与控制器直连，提供多种服务的服务集群，PC1和PC2分别连接在右OVS上。实验结果通过数据流获得的网络带宽来验证和转发的速率来验证。从服务器向PC1发送2种优先级不同的TCP流A、B，网络总带宽为10Gbit/s。在PC1上通过对A、B流量的分析，得到实验数据。  
@@ -86,7 +86,7 @@ QoS流量监管功能是采用令牌桶（Token-Bucket）机制进行的。这�
 在OpenvSwitch中采用HTB，Hierarchical Token Bucket令牌桶机制来保障和限制流量的带宽。后文将详细说明HTB机制在Queue队列上的应用。  
 
       
-![TB的基本工作原理](/image/floodlight-qos/2.png)  
+![TB的基本工作原理](/images/floodlight-qos/2.png)  
 
         
         
@@ -97,24 +97,24 @@ DiffServ在实现上由PHB、包的分类机制和流量控制功能三个功能
 当网络中的其他OpenvSwitch在收到该IP包时，则根据该字段所标识的服务类别将其放入不同的队列，并由作用于输出队列的流量管理机制按事先设定的带宽、缓冲处理控制每个队列，即给予不同的每一跳行为（Per-Hop Behavior，PHB）。  
 在实际应用时，DiffServ将IPv4协议中IP服务类型字段（TOS），作为业务类别分类的标示符。理论上，用户可以在0x000000至0xffffff 范围内为每个区分服务编码点对应的服务级别分配任意PHB行为。每个服务等级为分类的业务流提供不同的QoS保证，如下所示：  
 
-![Openflow QoS平面结构图](/image/floodlight-qos/3.png)     
+![Openflow QoS平面结构图](/images/floodlight-qos/3.png)     
 
 
 在实际应用时，具体工作流程如下：  
    （1）OVS对业务进行转发，同时运行在入端口上的策略单元，对接受到的业务流进行测量和监控，查询数据业务是否遵循了SLA，并依据测量的结果对业务流进行整形、丢弃和重新标记等工作。这一过程称为流量调整（traffic conditioning，TC）或流量策略（traffic policing，TP）。  
    （2）业务流在入端口进行了流量调整后，再对其DSCP字段进行检査，根据检查结果与本地 SLA 等级条约进行对比并选择特定的PHB。根据PHB，所指定的排队策略，将不同服务等级的业务流送入OpenvSwitch出端口上的不同输出队列进行排队处理，并遵循约定好带宽缓存及调度。当网络发生拥塞时，还需要按照 PHB对应的丢弃策略为不同等级的数据包提供差别的丢弃操作。  
    （3）当业务流进入到OpenvSwitch时，只需根据DSCP字段进行业务分类，并选择特定PHB，获得指定的流量调整、队列调度和丢弃操作。最后业务流进入网络中的下一跳，获得类似的DiffServ处理。  
-![数据包的分类和调节示意图](/image/floodlight-qos/4.png)                     
+![数据包的分类和调节示意图](/images/floodlight-qos/4.png)                     
 
 ###3.2 控制平面功能设计
 QoS控制负责对接收到指令进行解析和执行，实现集中式控制、布式处理。交换设备端口处流量控制分为入端口处流量整形和出端口处队列管理和调度。其中，交换机入端口处的流量整形和限制，具体通过调用ovsdb对应接口函数对入端口速率限制和入端口突发量等参数进行设置来实现。交换机出端口处主要采用队列管理和队列调度机制对流出网络的数据流进行控制。  
 队列管理和队列调度是流量调度的两个关键环节，为了在分配有限的网络资源时，保证业务流之间的公平性。队列管理为入队的报文分配缓存，当缓存溢出时对报文进行丢弃，目的是减小因排队造成的端点间的延迟。队列调度负责通过预设的调度算法将队列中等待处理的分组调度到相应的输出链路上。  
- ![QoS控制平面流程图](/image/floodlight-qos/5.png) 
+ ![QoS控制平面流程图](/images/floodlight-qos/5.png) 
                 
                
 ###3.3 转发平面功能设计
 Linux内核流量机制提供了多种队列管理和队列调度的算法。其中无类的队列规则能够实现队列管理功能，如 RED、WRED算法，分类的队列规则能够实现队列调度功能，如HTB、CBQ、PRIO算法。本系统中交换机出端口处的队列调度和队列管理机制的实现，我们采用了HTB（Hierarchical Token Bucket）队列调度算法，实现底层转发结点上的队列管理。其中，队列调度机制通过对Open vSwitch的linut-htb队列模块进行配置来实现。  
-![OpenvSwitch交换机转发流程图](/image/floodlight-qos/6.png)  
+![OpenvSwitch交换机转发流程图](/images/floodlight-qos/6.png)  
 
 
  交换机端口处的流量整形和限制，队列调度机制通过对OpenvSwitch的linut-htb队列模块进行配置来实现。
@@ -122,7 +122,7 @@ Linux内核流量机制提供了多种队列管理和队列调度的算法。其
 
 
 
-![OpenvSwitch交换机对流量整形](/image/floodlight-qos/7.png)
+![OpenvSwitch交换机对流量整形](/images/floodlight-qos/7.png)
 
 
 
@@ -134,7 +134,7 @@ DiffServ模型中对入端口处的流量整形和丢弃，出端口处的流量
    （四）Ceil：最大的速度，和rate之间的差是最多能向其他流量借多少  
 
 
-![OpenvSwitch交换机HTB实现](/image/floodlight-qos/8.png)
+![OpenvSwitch交换机HTB实现](/images/floodlight-qos/8.png)
 
 
 
@@ -341,13 +341,13 @@ try:
 
 ####5.1.2 实验拓扑
     通过Mininet的custom下的Python文件建立自定义拓扑  
-![Mininet自定义拓扑](/image/floodlight-qos/9.png)
+![Mininet自定义拓扑](/images/floodlight-qos/9.png)
 
 
 
 MAC地址00:00:00:00:00:00:00:01、00:00:00:00:00:00:00:02分别为OpenvSwitch1和OpenvSwitch2，连接OpenvSwitch1的为服务器，提供视频流、Web等服务，连接OpenvSwitch2的为主机Host1,Host2。  
 
-![Floodlight显示拓扑](/image/floodlight-qos/10.png)
+![Floodlight显示拓扑](/images/floodlight-qos/10.png)
 
 
 
@@ -368,64 +368,64 @@ TCP测试
 首先不加入策略，服务器到Host1的TCP带宽为2Gbps测试如下：  
 
 
-![显示不加入任何Queue的带宽](/image/floodlight-qos/11.png)
+![显示不加入任何Queue的带宽](/images/floodlight-qos/11.png)
 开启QoS的服务成功：  
 
-![显示QoS功能开启](/image/floodlight-qos/12.png)
+![显示QoS功能开启](/images/floodlight-qos/12.png)
 
 
 在OpenvSwitch1的接口上创建Queue队列机制:  
 
-![OVS的接口上创建Queue队列机制](/image/floodlight-qos/13.png)
+![OVS的接口上创建Queue队列机制](/images/floodlight-qos/13.png)
 
 创建一条实际的QoS Policy策略：  
 
 
-![创建QoS Policy](/image/floodlight-qos/14.png)
+![创建QoS Policy](/images/floodlight-qos/14.png)
 
 
 在Floodlight控制器中已经声明 Protocol=“6”是TCP流量  
 
 
 
-![显示流量种类的Map表](/image/floodlight-qos/15.png)
+![显示流量种类的Map表](/images/floodlight-qos/15.png)
 
 创建QoS Policy策略成功，并且写入json文件中：  
 
 
-![显示Policy](/image/floodlight-qos/16.png)
+![显示Policy](/images/floodlight-qos/16.png)
 
 再利用iperf工具测试服务器到Host1的TCP速率  
 
 
-![显示TCP带宽](/image/floodlight-qos/17.png)
+![显示TCP带宽](/images/floodlight-qos/17.png)
 
 不加入队列机制时由服务器向Host1发送的数据流速率在2Gbps左右，在加入了两条限制队列之后(一条为限制限制在2Mbps，另一条限制在100kbps)
 实验结果显示，由服务器向Host1发送的数据流速率分别限制在2Mbps和100kbps左右，与前面配置的预期结果一致，证明了QoS系统对底层交换设备流量控制功能的正确性。  
 同理，对其他流量可以做限速来保障需要额外带宽的流量。  
 
 
-![系统端口TCP带宽保障测试](/image/floodlight-qos/18.png)
+![系统端口TCP带宽保障测试](/images/floodlight-qos/18.png)
 
 在第一个测试的基础上改变OVS上的Queue队列机制，Queue0的机制是保障最低的带宽为100Mbps：  
 
-![显示Queue0队列](/image/floodlight-qos/19.png)
+![显示Queue0队列](/images/floodlight-qos/19.png)
 
 
 再定义一条具体的TCP流基于Queue0  
 
 
 
-![定义TCP流基于Queue0队列](/image/floodlight-qos/20.png)
+![定义TCP流基于Queue0队列](/images/floodlight-qos/20.png)
 
 将具体的TCP流基于Queue0的QoS策略写入Json文件  
 
-![Policy写入Json文件](/image/floodlight-qos/21.png)
+![Policy写入Json文件](/images/floodlight-qos/21.png)
 
 
 使用iperf进行测试带宽：  
 
-![显示TCP流带宽](/image/floodlight-qos/22.png)
+![显示TCP流带宽](/images/floodlight-qos/22.png)
 
 在加入Queue0队列之后速度比之前2Gbps降低,但是Queue0的策略是保障最低带宽（100Mbps），所以带宽还是达到了500Mbps。达到题目的要求。  
 
@@ -436,12 +436,12 @@ TCP测试
 该流量类型在Floodlight控制器的Counter模块中定义。  
 
 
-![显示视频流Map表](/image/floodlight-qos/23.png)
+![显示视频流Map表](/images/floodlight-qos/23.png)
 
 将该流量写入QoS Policy策略机制使用Queue0带宽保障队列：  
 
 
-![定义视频流](/image/floodlight-qos/24.png)
+![定义视频流](/images/floodlight-qos/24.png)
 
 视频流QoS Policy写入成功：  
 
@@ -461,18 +461,6 @@ TCP测试
 （3）将控制器和交换机进行集中式控制分布式处理的方式进行部署，设计并实现了控制灵活、扩展性高的 QoS 系统。  
     创新点：设计并实现基于可编程网络流表控制QoS系统框架模型，限制基于TCP流量或者其他流量来保障服务级别高的带宽。直接保障基于TCP流量或者其他流量的带宽。还可以借助Floodlight控制器对视频流进行单独区分并且保障其带宽。  
 但该存在的不足是无法在Mininet上模拟视频流。控制平面缺乏对网络流量的实时监控和资源利用率等信息的采集，不能根据网络环境提供动态的 QoS 策略，缺乏自适应性，因此更加智能和自适应的 QoS 管理体系是下一步的主要研究方向。  
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
