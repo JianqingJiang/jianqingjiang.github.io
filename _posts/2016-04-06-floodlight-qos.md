@@ -62,7 +62,7 @@ categories: [SDN]
 
 ###   1.3、实验环境搭建  
 为了验证网络流量控制的性能，搭建了一个简单的DiffServ的小型网络，如图所示：  
- ![实验拓扑图](/image/1.png)  
+ ![实验拓扑图](/image/floodlight-qos/1.png)  
 
 
 其中OpenFlow控制器为运行Floodlight控制器程序的Linux(Ubuntu)主机，Floodlight和OVS为运行OpenFlow网络的控制器和交换机。OVS与控制器直连，提供多种服务的服务集群，PC1和PC2分别连接在右OVS上。实验结果通过数据流获得的网络带宽来验证和转发的速率来验证。从服务器向PC1发送2种优先级不同的TCP流A、B，网络总带宽为10Gbit/s。在PC1上通过对A、B流量的分析，得到实验数据。
