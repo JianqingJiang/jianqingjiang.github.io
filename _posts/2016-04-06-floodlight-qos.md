@@ -2,11 +2,8 @@
 layout: post
 title: Floodlight指定业务QoS带宽保障
 description: "Floodlight指定业务QoS带宽保障"
-tags: [sample post]
-image:
-    feature: feature.jpg
-    credit: dargadgetz
-    creditlink: http://www.dargadgetz.com/ios-8-abstract-wallpaper-pack-for-iphone-5s-5c-and-ipod-touch-retina/
+tags: [SDN]
+categories: [SDN]
 ---
 
  #第三题：指定业务带宽保障
