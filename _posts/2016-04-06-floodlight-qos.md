@@ -173,22 +173,18 @@ sudo ovs-vsctl -- set port s1-eth1 qos=@defaultqos -- set port s1-eth2 qos=@defa
 
 QoS控制器的QoSPolicy代码： 
  
-<pre><code>
+<br><code>
 Map<String, Object> row;
-        	IResultSet policySet = storageSource  
-        			.executeQuery(TABLE_NAME, ColumnNames, null, null );//从strogeSource中读信息 
-        	for( Iterator<IResultSet> iter = policySet.iterator(); iter.hasNext();){
-        		row = iter.next().getRow();/*遍历信息*/
-        		QoSPolicy p = new QoSPolicy();
-        		if(!row.containsKey(COLUMN_POLID) 
-        				|| !row.containsKey(COLUMN_SW)/*获取OVS的ID*/
-        				|| !row.containsKey(COLUMN_QUEUE)/*获取队列ID*/
-        				|| !row.containsKey(COLUMN_ENQPORT)/*获取端口*/
-        				|| !row.containsKey(COLUMN_SERVICE)){
-        			logger.error("Skipping entry with required fields {}", row);/*获取服务类型*/
+IResultSet policySet = storageSource  
+.executeQuery(TABLE_NAME, ColumnNames, null, null );//从strogeSource中读信息 
+for( Iterator<IResultSet> iter = policySet.iterator(); iter.hasNext();){
+row = iter.next().getRow();//遍历信息
+QoSPolicy p = new QoSPolicy();
+if(!row.containsKey(COLUMN_POLID) || !row.containsKey(COLUMN_SW)//获取OVS的ID || !row.containsKey(COLUMN_QUEUE)//获取队列ID || !row.containsKey(COLUMN_ENQPORT)//获取端口 || !row.containsKey(COLUMN_SERVICE)){
+        			logger.error("Skipping entry with required fields {}", row);//获取服务类型
         			continue;
         		}
-</code></pre>
+</code></p>
 
 ###   4.2 CLI指令配置模块实现
 模块的具体实现将在后续章节进行详细阐述。控制平面上模块间的交互动作如下：  
