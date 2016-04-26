@@ -144,8 +144,9 @@ DiffServ模型中对入端口处的流量整形和丢弃，出端口处的流量
 
 在CLI上输入Queue队列命令如下：
 
-`
-sudo ovs-vsctl -- set port s1-eth1 qos=@defaultqos -- set port s1-eth2 qos=@defaultqos -- --id=@defaultqos create qos type=linux-htb other-config:max-rate=1000000000 queues=0=@q0,1=@q1,2=@q2 -- --id=@q0 create queue other-config:min-rate=1000000000 other-config:max-rate=1000000000 -- --id=@q1 create queue other-config:max-rate=20000000 -- --id=@q2 create queue other-config:max-rate=2000000 other-config:mix-rate=200000`
+<pre><code>
+sudo ovs-vsctl -- set port s1-eth1 qos=@defaultqos -- set port s1-eth2 qos=@defaultqos -- --id=@defaultqos create qos type=linux-htb other-config:max-rate=1000000000 queues=0=@q0,1=@q1,2=@q2 -- --id=@q0 create queue other-config:min-rate=1000000000 other-config:max-rate=1000000000 -- --id=@q1 create queue other-config:max-rate=20000000 -- --id=@q2 create queue other-config:max-rate=2000000 other-config:mix-rate=200000
+</code></pre>
 
 分别在OpenvSwitch的端口出创建三个Queue队列机制，速率则可以由自己定义。
 
@@ -161,9 +162,9 @@ sudo ovs-vsctl -- set port s1-eth1 qos=@defaultqos -- set port s1-eth2 qos=@defa
 
 
 
-##第四章：OpenFlow QoS 实现
+##  第四章：OpenFlow QoS 实现
 
-###4.1 QoS 控制器模块实现
+###   4.1 QoS 控制器模块实现
 在整个管理系统中 QoS 控制管理模块处于核心的地位，部署在 OpenFlow 控制器上，提供 DiffServ 模型的流表控制管理功能。OpenFlow 网络的流表下发等控制行为是通过 QoS 控制器来决策并完成的。其中，流表的下发需要控制器和被控制的OpenFlow 交换机通过 OpenFlow 协议规范来完成。  
 本系统设计并实现的基于DiffServ模型的流量控制模块提供以下基本的流量控制功能：  
    （1）限制特定流量带宽和速率；  
@@ -192,7 +193,7 @@ Map<String, Object> row;
         		}
 </code></pre>
 
-###4.2 CLI指令配置模块实现
+###   4.2 CLI指令配置模块实现
 模块的具体实现将在后续章节进行详细阐述。控制平面上模块间的交互动作如下：  
 （1）CLI 指令配置模块下发管理员的配置指令；  
 （2）QoS 控制器读取指令，通过流表控制程序实现流表管理机制；  
@@ -218,7 +219,7 @@ Map<String, Object> row;
    	exit()
 </code></pre>
 
-### 4.3 DiffServ流量控制模块实现
+###   4.3 DiffServ流量控制模块实现
 控制器模块是对 Floodlight 控制功能的扩展，即通过编程实现一些预定的QoS 配置功能。该模块位于OpenFlow 控制器上，主要提供基于分类业务的QoS策略，主要包括基于DSCP和 IP 头多元组匹配分类策略，数据流入队策略，主要完成三个功能：  
    （1）从命令配置组件读取QoS流规则，对流规则进行解析，提取流分类、QoS控制器标记和入队的流匹配字段规则；  
    （2）将流匹配规则以底层OpenFlow交换机可以理解的流表形式按OpenFlow 协议进行封装；  
@@ -330,10 +331,10 @@ try:
 
 
 
-##第五章OpenFlow QoS功能测试
+##    第五章OpenFlow QoS功能测试
 
-###5.1 系统测试环境介绍
-####5.1.1 测试平台
+###   5.1 系统测试环境介绍
+####   5.1.1 测试平台
 物理机安装VMware Workstation 10。下载SDN Hub（sdnhub.org）构建的all-in-one tutorial VM并导入到VMware。这是一个预装了很多SDN相关的软件和工具的64位的Ubuntu 12.10虚拟机映像。内置软件和工具如下：  
    ·SDN控制器：Opendaylight，Ryu，Floodlight，Pox和Trema  
    ·示例代码：hub，2层学习型交换机和其它应用  
@@ -342,7 +343,7 @@ try:
    ·Eclipse和Maven  
    ·Wireshark：协议数据包分析  
 
-####5.1.2 实验拓扑
+####    5.1.2 实验拓扑
     通过Mininet的custom下的Python文件建立自定义拓扑  
 ![Mininet自定义拓扑](/images/floodlight-qos/9.png)
 
@@ -354,19 +355,19 @@ MAC地址00:00:00:00:00:00:00:01、00:00:00:00:00:00:00:02分别为OpenvSwitch1�
 
 
 
-###5.2 实验测试方法
-####5.2.1网络流量测试工具
+###   5.2 实验测试方法
+####   5.2.1网络流量测试工具
 需要一些软件辅助功能验证的执行，如用于分析数据流的网络带宽性能测试工具iperf。  
 TCP测试  
 客户端执行：iperf -s是windows平台下命令。  
 服务器执行：iperf -c 10.0.0.2  
 
-####5.2.2 流量控制功能验证方法
+####    5.2.2 流量控制功能验证方法
 这部分实验对OpenFlow软交换机上DiffServ模块实例提供的整体   DiffServ功能进行正确性验证。当被标记的数据流通过OpenvSwitch时，在其上应用的 QoS 代理对交换机进行的队列配置应具有对这些数据流的分组进行汇聚分类和转发的能力。如果Host1到 Host2方向上的数据流的带宽与事先配置的HTB队列调度算法设置的带宽一致，则可验证OpenFlow QoS管理系统上的DiffServ模型流量控制功能的正确性。  
 
 
-###5.3 流量控制功能验证
-####5.3.1 系统端口速率TCP限速测试
+###   5.3 流量控制功能验证
+####    5.3.1 系统端口速率TCP限速测试
 为了验证管理系统指令配置模块的配置的结果，从Host进行打包测试，验证配置端口速率限制的正确性。首先由服务器作为服务端，Host1作为客户端进行TCP打包，然后加入QoS策略再进行TCP打包测试。从打包结果可以看出QoS策略完成了端口队列速率限制的功能。  
 首先不加入策略，服务器到Host1的TCP带宽为2Gbps测试如下：  
 
@@ -434,7 +435,7 @@ TCP测试
 
 
 
-###5.3.3系统视频流速率带宽保障测试(具体到视频流)
+###   5.3.3系统视频流速率带宽保障测试(具体到视频流)
 在Floodlight控制器中已经声明 Protocol=“4b”是Packet_Video流量,说明可以具体到特定视频流的带宽保障。  
 该流量类型在Floodlight控制器的Counter模块中定义。  
 
@@ -450,7 +451,7 @@ TCP测试
 
 
 
-##5.4实验总结 
+##   5.4实验总结 
 上述实验可证明本实验完成三个具体QoS策略：  
 
     A. 限制基于TCP流量或者其他流量来保障服务级别高的带宽。  
@@ -656,7 +657,7 @@ public class TypeAliases {
 
 
 
-## Floodlight官网提供的视频
+##   Floodlight官网提供的视频
 
 {::nomarkdown}
 <iframe width="560" height="315" src="http://www.youtube.com/watch?v=M03p8_hJxdc" frameborder="0" allowfullscreen></iframe>
