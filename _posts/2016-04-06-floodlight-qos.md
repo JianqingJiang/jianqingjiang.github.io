@@ -144,9 +144,9 @@ DiffServ模型中对入端口处的流量整形和丢弃，出端口处的流量
 
 在CLI上输入Queue队列命令如下：
 
-<pre><code>
+<br><code>
 sudo ovs-vsctl -- set port s1-eth1 qos=@defaultqos -- set port s1-eth2 qos=@defaultqos -- --id=@defaultqos create qos type=linux-htb other-config:max-rate=1000000000 queues=0=@q0,1=@q1,2=@q2 -- --id=@q0 create queue other-config:min-rate=1000000000 other-config:max-rate=1000000000 -- --id=@q1 create queue other-config:max-rate=20000000 -- --id=@q2 create queue other-config:max-rate=2000000 other-config:mix-rate=200000
-</code></pre>
+</code></p>
 
 分别在OpenvSwitch的端口出创建三个Queue队列机制，速率则可以由自己定义。
 
@@ -200,7 +200,7 @@ Map<String, Object> row;
 （3）QoS 读取指令，通过查询、配置接口，对底层交换机状态、端口配置、队列配置进行对应的操作。  
  系统转发平面由位于系统的底层，由传输结点组成，因此除了对流经网络的分类业务流进行数据的传输外，还需要对数据流进行流量控制、带宽调整、等操作，而流分类、标记机制由控制器进行控制和管理。  
  以添加一条Queue队列为例：  
-<pre><code>
+<br><code>
  try:
    	cmd = "--controller=%s:%s --type ip --src %s --dst %s --add --name %s" % (c,cprt,src,dest,name)    /*在Linux命令端口加入Queue队列*/
    	print './circuitpusher.py %s' % cmd
@@ -217,7 +217,7 @@ Map<String, Object> row;
    	print "Error opening file, Error: %s" % str(e)
    	#cannot continue without file
    	exit()
-</code></pre>
+</code></p>
 
 ###   4.3 DiffServ流量控制模块实现
 控制器模块是对 Floodlight 控制功能的扩展，即通过编程实现一些预定的QoS 配置功能。该模块位于OpenFlow 控制器上，主要提供基于分类业务的QoS策略，主要包括基于DSCP和 IP 头多元组匹配分类策略，数据流入队策略，主要完成三个功能：  
@@ -234,7 +234,7 @@ Map<String, Object> row;
 
 QoS策略则为每类QoS服务提供分类、标记和入队操作的匹配规则。主要包括策略编号 policyid、IP 包头域、交换机通用唯一标识符（Universally Unique Identifier，UUID）标示符dpid（datapath id）和本条策略（policy）匹配的服务类型编号sRef及本条策略的优先级（priority），QoSPolicy类的具体定义如下：  
 
-<pre><code>
+<br><code>
 public class QoSPolicy {
 public long policyid;
 public String type;
@@ -260,11 +260,11 @@ public short enqueueport;
 public String sRef; /*policy 策略对应服务编号 sRef*/
 public short priority = 0; /*policy 策略优先级*/
 }
-</code></pre>
+</code></p>
 
 QoS 策略添加函数addPolicy通过指令接口获得QoSPolicy的匹配规则，同时通过调用 flowPusher 将流规则下发到特定底层交换机，以String类型的 swid 作为标记，具体代码实现如下：  
   
-<pre><code>
+<br><code>
 public void addPolicy(QoSPolicy policy, String swid) {
 /*从 policy 结构体中获取流表修改表项*/
 OFFlowMod flow = policyToFlowMod(policy);
@@ -272,10 +272,10 @@ logger.info("Adding policy-flow {} to switch {}",flow.toString(),swid);
 /*将 dpid 哈希值作为流名称的唯一标识码*/
 flowPusher.addFlow(policy.name+Integer.toString(swid.hashCode()), flow,swid);
 }
-</code></pre>
+</code></p>
 
 指令配置模块通过调用addPolicy函数分别添加流控规则实现对数据流的分类、标记和入队操作。  
-<pre><code>
+<br><code>
 elif obj_type == "policy":
 	 print "Trying to add policy %s" % json
 	 url = "http://%s:%s/wm/qos/policy/json" % (controller,port)
@@ -297,7 +297,7 @@ try:
 	 else:
 	   print "Error parsing command %s" % type
 	   exit(1)
-</code></pre>
+</code></p>
 现基于 Linux 操作系统的终端来完成。CLI 指令配置模块程序通过调用 QoS 控制器API接口和QoS代理 API 接口实现 QoS 的配置功能。  
 下面对指令配置模块为管理员提供的主要输入指令及其功能进行详细的分
 析：  
@@ -334,7 +334,7 @@ try:
 ##    第五章OpenFlow QoS功能测试
 
 ###   5.1 系统测试环境介绍
-####   5.1.1 测试平台
+####    5.1.1 测试平台
 物理机安装VMware Workstation 10。下载SDN Hub（sdnhub.org）构建的all-in-one tutorial VM并导入到VMware。这是一个预装了很多SDN相关的软件和工具的64位的Ubuntu 12.10虚拟机映像。内置软件和工具如下：  
    ·SDN控制器：Opendaylight，Ryu，Floodlight，Pox和Trema  
    ·示例代码：hub，2层学习型交换机和其它应用  
@@ -472,7 +472,7 @@ TCP测试
 
 附录  
 流量种类Map表：  
-<pre><code>
+<br><code>
 public class TypeAliases {
     protected static final Map<String,String> l3TypeAliasMap = 
             new HashMap<String, String>();
@@ -653,7 +653,7 @@ public class TypeAliases {
         l4TypeAliasMap.put("8e", "L4_ROHC");
     }
 }
-</code></pre>
+</code></p>
 
 
 
