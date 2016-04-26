@@ -173,7 +173,7 @@ sudo ovs-vsctl -- set port s1-eth1 qos=@defaultqos -- set port s1-eth2 qos=@defa
 
 QoS控制器的QoSPolicy代码： 
  
-<br><code>
+<pre><code>
 Map<String, Object> row;
         	IResultSet policySet = storageSource  
         			.executeQuery(TABLE_NAME, ColumnNames, null, null );//从strogeSource中读信息 
@@ -188,7 +188,7 @@ Map<String, Object> row;
         			logger.error("Skipping entry with required fields {}", row);/*获取服务类型*/
         			continue;
         		}
-</code></p>
+</code></pre>
 
 ###   4.2 CLI指令配置模块实现
 模块的具体实现将在后续章节进行详细阐述。控制平面上模块间的交互动作如下：  
@@ -326,7 +326,7 @@ try:
 ##    第五章OpenFlow QoS功能测试
 
 ###   5.1 系统测试环境介绍
-####    5.1.1 测试平台
+####    5.1.1 测试平台  
 物理机安装VMware Workstation 10。下载SDN Hub（sdnhub.org）构建的all-in-one tutorial VM并导入到VMware。这是一个预装了很多SDN相关的软件和工具的64位的Ubuntu 12.10虚拟机映像。内置软件和工具如下：  
    ·SDN控制器：Opendaylight，Ryu，Floodlight，Pox和Trema  
    ·示例代码：hub，2层学习型交换机和其它应用  
@@ -336,7 +336,7 @@ try:
    ·Wireshark：协议数据包分析  
 
 ####    5.1.2 实验拓扑
-    通过Mininet的custom下的Python文件建立自定义拓扑  
+通过Mininet的custom下的Python文件建立自定义拓扑  
 ![Mininet自定义拓扑](/images/floodlight-qos/9.png)
 
 
@@ -348,7 +348,7 @@ MAC地址00:00:00:00:00:00:00:01、00:00:00:00:00:00:00:02分别为OpenvSwitch1�
 
 
 ###   5.2 实验测试方法
-####   5.2.1网络流量测试工具
+####    5.2.1网络流量测试工具
 需要一些软件辅助功能验证的执行，如用于分析数据流的网络带宽性能测试工具iperf。  
 TCP测试  
 客户端执行：iperf -s是windows平台下命令。  
