@@ -174,11 +174,11 @@ sudo ovs-vsctl -- set port s1-eth1 qos=@defaultqos -- set port s1-eth2 qos=@defa
 QoS控制器的QoSPolicy代码： 
  
 <br><code>
+
 Map<String, Object> row;
 
         	IResultSet policySet = storageSource  
-        			.executeQuery(TABLE_NAME, ColumnNames, null, null );
-//从strogeSource中读信息 
+        			.executeQuery(TABLE_NAME, ColumnNames, null, null );//从strogeSource中读信息 
         	for( Iterator<IResultSet> iter = policySet.iterator(); iter.hasNext();){
         		row = iter.next().getRow();/*遍历信息*/
         		QoSPolicy p = new QoSPolicy();
@@ -187,8 +187,7 @@ Map<String, Object> row;
         				|| !row.containsKey(COLUMN_QUEUE)/*获取队列ID*/
         				|| !row.containsKey(COLUMN_ENQPORT)/*获取端口*/
         				|| !row.containsKey(COLUMN_SERVICE)){
-        			logger.error("Skipping entry with required fields {}", row);
-/*获取服务类型*/
+        			logger.error("Skipping entry with required fields {}", row);/*获取服务类型*/
         			continue;
         		}
 </code></p>
@@ -202,16 +201,16 @@ Map<String, Object> row;
  以添加一条Queue队列为例：  
 <br><code>
  try:
-   	cmd = "--controller=%s:%s --type ip --src %s --dst %s --add --name %s" % (c,cprt,src,dest,name)    /*在Linux命令端口加入Queue队列*/
+   	cmd = "--controller=%s:%s --type ip --src %s --dst %s --add --name %s" % (c,cprt,src,dest,name)    //*在Linux命令端口加入Queue队列*  
    	print './circuitpusher.py %s' % cmd
    	c_proc = subprocess.Popen('./circuitpusher.py %s' % cmd, shell=True)
-   	print "Process %s started to create circuit" % c_proc.pid   /*circuit创建完成*/
+   	print "Process %s started to create circuit" % c_proc.pid   //*circuit创建完成*  
    	#wait for the circuit to be created
    	c_proc.wait()
    except Exception as e:
    	print "could not create circuit, Error: %s" % str(e)  
    try:
-   	subprocess.Popen("cat circuits.json",shell=True).wait() /*把策略写入json*/
+   	subprocess.Popen("cat circuits.json",shell=True).wait() //*把策略写入json*  
    except Exception as e:
    	print "Error opening file, Error: %s" % str(e)
    	#cannot continue without file
@@ -233,11 +232,10 @@ Map<String, Object> row;
 
 QoS策略则为每类QoS服务提供分类、标记和入队操作的匹配规则。主要包括策略编号 policyid、IP 包头域、交换机通用唯一标识符（Universally Unique Identifier，UUID）标示符dpid（datapath id）和本条策略（policy）匹配的服务类型编号sRef及本条策略的优先级（priority），QoSPolicy类的具体定义如下：  
 
-<br><code>
+<pre><code>
 public class QoSPolicy {
 public long policyid;
-public String type;
-/*IP 包头域*/
+public String type;/*IP 包头域*/
 public short ethtype;
 public byte protocol;
 public short ingressport;
@@ -249,21 +247,19 @@ public String ethsrc;
 public String ethdst;
 public short tcpudpsrcport31
 public short tcpudpdstport;
-public String dpid; /*交换机 UUID*/
-pubic short set_nw_tos;/*重新标记 DSCP 值*/
-/*入队操作，Enqueue 1:2，其中 1 表示 queue 队列号，2 表示 enqueue 入队
-端口号*/
+public String dpid; /*交换机 UUID*/  
+pubic short set_nw_tos;/*重新标记 DSCP 值*//*入队操作，Enqueue 1:2，其中 1 表示 queue 队列号，2 表示 enqueue 入队
+端口号*/  
 public short queue;
-public short enqueueport;
-/*默认情况下服务类型为 Best Effort*/
+public short enqueueport;/*默认情况下服务类型为 Best Effort*/  
 public String sRef; /*policy 策略对应服务编号 sRef*/
 public short priority = 0; /*policy 策略优先级*/
 }
-</code></p>
+</code></pre>
 
 QoS 策略添加函数addPolicy通过指令接口获得QoSPolicy的匹配规则，同时通过调用 flowPusher 将流规则下发到特定底层交换机，以String类型的 swid 作为标记，具体代码实现如下：  
   
-<br><code>
+<pre><code>
 public void addPolicy(QoSPolicy policy, String swid) {
 /*从 policy 结构体中获取流表修改表项*/
 OFFlowMod flow = policyToFlowMod(policy);
@@ -271,14 +267,13 @@ logger.info("Adding policy-flow {} to switch {}",flow.toString(),swid);
 /*将 dpid 哈希值作为流名称的唯一标识码*/
 flowPusher.addFlow(policy.name+Integer.toString(swid.hashCode()), flow,swid);
 }
-</code></p>
+</code></pre>
 
 指令配置模块通过调用addPolicy函数分别添加流控规则实现对数据流的分类、标记和入队操作。  
 <br><code>
 elif obj_type == "policy":
 	 print "Trying to add policy %s" % json
-	 url = "http://%s:%s/wm/qos/policy/json" % (controller,port)
-	 #preserve immutable         
+	 url = "http://%s:%s/wm/qos/policy/json" % (controller,port)  #preserve immutable         
 	 _json = json
 try:
 	 req = helper.request("POST",url,_json)
