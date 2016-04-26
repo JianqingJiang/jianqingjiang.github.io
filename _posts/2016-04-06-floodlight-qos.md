@@ -174,9 +174,7 @@ sudo ovs-vsctl -- set port s1-eth1 qos=@defaultqos -- set port s1-eth2 qos=@defa
 QoS控制器的QoSPolicy代码： 
  
 <br><code>
-
 Map<String, Object> row;
-
         	IResultSet policySet = storageSource  
         			.executeQuery(TABLE_NAME, ColumnNames, null, null );//从strogeSource中读信息 
         	for( Iterator<IResultSet> iter = policySet.iterator(); iter.hasNext();){
@@ -199,7 +197,7 @@ Map<String, Object> row;
 （3）QoS 读取指令，通过查询、配置接口，对底层交换机状态、端口配置、队列配置进行对应的操作。  
  系统转发平面由位于系统的底层，由传输结点组成，因此除了对流经网络的分类业务流进行数据的传输外，还需要对数据流进行流量控制、带宽调整、等操作，而流分类、标记机制由控制器进行控制和管理。  
  以添加一条Queue队列为例：  
-<br><code>
+<pre><code>
  try:
    	cmd = "--controller=%s:%s --type ip --src %s --dst %s --add --name %s" % (c,cprt,src,dest,name)    //*在Linux命令端口加入Queue队列*  
    	print './circuitpusher.py %s' % cmd
@@ -215,7 +213,7 @@ Map<String, Object> row;
    	print "Error opening file, Error: %s" % str(e)
    	#cannot continue without file
    	exit()
-</code></p>
+</code></pre>
 
 ###   4.3 DiffServ流量控制模块实现
 控制器模块是对 Floodlight 控制功能的扩展，即通过编程实现一些预定的QoS 配置功能。该模块位于OpenFlow 控制器上，主要提供基于分类业务的QoS策略，主要包括基于DSCP和 IP 头多元组匹配分类策略，数据流入队策略，主要完成三个功能：  
@@ -270,7 +268,7 @@ flowPusher.addFlow(policy.name+Integer.toString(swid.hashCode()), flow,swid);
 </code></pre>
 
 指令配置模块通过调用addPolicy函数分别添加流控规则实现对数据流的分类、标记和入队操作。  
-<br><code>
+<pre><code>
 elif obj_type == "policy":
 	 print "Trying to add policy %s" % json
 	 url = "http://%s:%s/wm/qos/policy/json" % (controller,port)  #preserve immutable         
@@ -291,7 +289,7 @@ try:
 	 else:
 	   print "Error parsing command %s" % type
 	   exit(1)
-</code></p>
+</code></pre>
 现基于 Linux 操作系统的终端来完成。CLI 指令配置模块程序通过调用 QoS 控制器API接口和QoS代理 API 接口实现 QoS 的配置功能。  
 下面对指令配置模块为管理员提供的主要输入指令及其功能进行详细的分
 析：  
@@ -466,7 +464,7 @@ TCP测试
 
 附录  
 流量种类Map表：  
-<br><code>
+<pre><code>
 public class TypeAliases {
     protected static final Map<String,String> l3TypeAliasMap = 
             new HashMap<String, String>();
@@ -646,7 +644,7 @@ public class TypeAliases {
         l4TypeAliasMap.put("8e", "L4_ROHC");
     }
 }
-</code></p>
+</code></pre>
 
 
 
