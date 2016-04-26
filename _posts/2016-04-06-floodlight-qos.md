@@ -144,9 +144,9 @@ DiffServ模型中对入端口处的流量整形和丢弃，出端口处的流量
 
 在CLI上输入Queue队列命令如下：
 
-<br><code>
+<pre><code>
 sudo ovs-vsctl -- set port s1-eth1 qos=@defaultqos -- set port s1-eth2 qos=@defaultqos -- --id=@defaultqos create qos type=linux-htb other-config:max-rate=1000000000 queues=0=@q0,1=@q1,2=@q2 -- --id=@q0 create queue other-config:min-rate=1000000000 other-config:max-rate=1000000000 -- --id=@q1 create queue other-config:max-rate=20000000 -- --id=@q2 create queue other-config:max-rate=2000000 other-config:mix-rate=200000
-</code></p>
+</code></pre>
 
 分别在OpenvSwitch的端口出创建三个Queue队列机制，速率则可以由自己定义。
 
@@ -209,8 +209,7 @@ Map<String, Object> row;
    	#wait for the circuit to be created
    	c_proc.wait()
    except Exception as e:
-   	print "could not create circuit, Error: %s" % str(e)
-   
+   	print "could not create circuit, Error: %s" % str(e)  
    try:
    	subprocess.Popen("cat circuits.json",shell=True).wait() /*把策略写入json*/
    except Exception as e:
@@ -507,8 +506,7 @@ public class TypeAliases {
         l3TypeAliasMap.put("9000", "L3_Loop");
         l3TypeAliasMap.put("9100", "L3_Q_in_Q");
         l3TypeAliasMap.put("cafe", "L3_LLT");
-    }
-    
+    }    
     protected static final Map<String,String> l4TypeAliasMap = 
             new HashMap<String, String>();
     static {
