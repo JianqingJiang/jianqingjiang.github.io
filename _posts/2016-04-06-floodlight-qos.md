@@ -173,7 +173,7 @@ sudo ovs-vsctl -- set port s1-eth1 qos=@defaultqos -- set port s1-eth2 qos=@defa
 
 QoS控制器的QoSPolicy代码： 
  
-<pre><code>
+<br><code>
 Map<String, Object> row;
 
         	IResultSet policySet = storageSource  
@@ -191,7 +191,7 @@ Map<String, Object> row;
 /*获取服务类型*/
         			continue;
         		}
-</code></pre>
+</code></p>
 
 ###   4.2 CLI指令配置模块实现
 模块的具体实现将在后续章节进行详细阐述。控制平面上模块间的交互动作如下：  
