@@ -3,7 +3,7 @@ layout: post
 title: OpenStack Kolla 源码分析 --Ansible
 description: "OpenStack Kolla 源码分析 --Ansible"
 tags: [OpenStack]
-categories: [SDN]
+categories: [OpenStack]
 ---
 
 
