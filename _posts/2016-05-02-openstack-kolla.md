@@ -578,6 +578,7 @@ pull.yml则是对容器化后的OpenStack中的服务的镜像进行pull操作�
 register.yml则是完成组件在keystone上的注册操作  
 start.yml则是完成容器的开启配置  
 upgrade.yml则是完成容器的升级，include config.yml bootstarp_service.yml以及start.yml  
+
 ###    在templates文件夹下是jinjia2的模板文件  
 Jinja2是Python下一个被广泛应用的模版引擎，他的设计思想来源于Django的模板引擎，并扩展了其语法和一系列强大的功能。其中最显著的一个是增加了沙箱执行功能和可选的自动转义功能，这对大多应用的安全性来说是非常重要的。  
 他基于unicode并能在python2.4之后的版本运行，包括python3。  
@@ -614,6 +615,7 @@ Jinja2是Python下一个被广泛应用的模版引擎，他的设计思想来�
 }
 
 </code></pre>
+
 ###    已经完成的BluePrints:  
 2015/12废弃使用Ansible自带的 Docker module。使用自己实现的docker模块 (见REF1), 并已经完成了所有ansible roles的改造。主要原因是：  
 官方Docker module有bug(见REF2), 在docker 1.8.3及以上的版本工作不正常 , 而且进展缓慢。而Kolla使用的Docker版本只能锁定在 1.8.2，不能进行升级。  
