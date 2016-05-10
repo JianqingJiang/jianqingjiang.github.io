@@ -15,7 +15,7 @@ Kolla项目利用Docker、Docker-Compose、Ansible来完成部署OpenStack,目�
 支持多种安装源：源代码安装，CentOS binary 安装等。可以替代掉 devstack。
 其实这些问题只要是由 Docker 来解决的。这也是 Kolla 使用 Docker 的原因。  
 Kolla定义了容器集合及容器两个概念  
-###    容器集合具有以下属性
+容器集合具有以下属性:  
 容器集由一个或多个容器子集或者一个或多个容器组成；  
 一个容器集提供一个逻辑上的的服务；  
 启动、停止和版本的控制以容器集为粒度；  
