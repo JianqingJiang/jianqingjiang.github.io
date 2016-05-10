@@ -7,13 +7,13 @@ categories: [OpenStack]
 ---
 
 
-#OpenStack Kolla 源码分析 --Ansible
+#   OpenStack Kolla 源码分析 --Ansible
 ###    Kolla介绍
 Kolla项目利用Docker、Docker-Compose、Ansible来完成部署OpenStack,目前Kolla已经能够完成一个all-in-one的开发环境的部署。从Kolla项目spec中的描述来看，主要是利用Docker容器的隔离性来达到OpenStack的原子升级、回退在升级。整个升级、回退的过程更容易控制影响范围，降低整个OpenStack的运维复杂度。Kolla 提供了生产级别的 OpenStack Service Containers。基于社区的最佳实践，提供了更好，更快，更可靠的 , 操作 OpenStack 的部署工具。  
 解决的问题：  
 平滑的升级 / 回滚 OpenStack  
 隔离 OpenStack 的不同组件的依赖环境。尤其是那些使用同一模块不同版本的情况。
-保证环境的一致性。解决由于安装时间不同，造成的包版本不一致的情况。
+保证环境的一致性。解决由于安装时间不同，造成的包版本不一致的情况。  
 支持多种安装源：源代码安装，CentOS binary 安装等。可以替代掉 devstack。
 其实这些问题只要是由 Docker 来解决的。这也是 Kolla 使用 Docker 的原因。  
 Kolla定义了容器集合及容器两个概念  
