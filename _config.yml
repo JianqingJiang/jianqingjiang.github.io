@@ -18,7 +18,7 @@ url: http://jianqingjiang.github.io
 menu:
   - title: 'Home'
     url: '/'
-  - title: 'Git'
+  - title: 'GitHub'
     url: 'https://github.com/JianqingJiang'
   - title: 'Install'
     url: '/theme-setup/'
@@ -27,13 +27,13 @@ menu:
   - title: 'Categories'
     url: '/categories'
     type: 'categories'
-  - title: 'Favorites'
-    url: '#'
-    submenu:
-      - title: 'Code Highlighter'
-        url: '/intro/code-highlighting-post/'
-      - title: 'Sample Post'
-        url: '/intro/sample-post/'
+#  - title: 'Favorites'
+#    url: '#'
+#    submenu:
+#      - title: 'Code Highlighter'
+#        url: '/intro/code-highlighting-post/'
+#      - title: 'Sample Post'
+#        url: '/intro/sample-post/'
 
 # Owner/author information
 owner:
