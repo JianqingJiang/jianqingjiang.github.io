@@ -8,7 +8,7 @@ categories: [OpenStack]
 
 
 #OpenStack Kolla 源码分析 --Ansible
-## Kolla介绍
+###    Kolla介绍
 Kolla项目利用Docker、Docker-Compose、Ansible来完成部署OpenStack,目前Kolla已经能够完成一个all-in-one的开发环境的部署。从Kolla项目spec中的描述来看，主要是利用Docker容器的隔离性来达到OpenStack的原子升级、回退在升级。整个升级、回退的过程更容易控制影响范围，降低整个OpenStack的运维复杂度。Kolla 提供了生产级别的 OpenStack Service Containers。基于社区的最佳实践，提供了更好，更快，更可靠的 , 操作 OpenStack 的部署工具。  
 解决的问题：  
 平滑的升级 / 回滚 OpenStack  
@@ -17,7 +17,7 @@ Kolla项目利用Docker、Docker-Compose、Ansible来完成部署OpenStack,目�
 支持多种安装源：源代码安装，CentOS binary 安装等。可以替代掉 devstack。
 其实这些问题只要是由 Docker 来解决的。这也是 Kolla 使用 Docker 的原因。  
 Kolla定义了容器集合及容器两个概念  
-###容器集合具有以下属性  
+###    容器集合具有以下属性  
 容器集由一个或多个容器子集或者一个或多个容器组成；  
 一个容器集提供一个逻辑上的的服务；  
 启动、停止和版本的控制以容器集为粒度；  
@@ -26,7 +26,7 @@ Kolla定义了容器集合及容器两个概念
 容器集合并不是原子的管理单位；  
 容器集必须提供进行服务状态监控的钩子；  
 
-###容器具有以下属性  
+###    容器具有以下属性  
 容器集能够原子的升级和回退；
 容器包含一个单调增长的计数器，用来标志容器的存活时间；  
 容器的职责是单一的；  
@@ -100,21 +100,20 @@ swift-proxy-server
 2.Ansible 部署 ( 这部分将来会迁移到 kolla-ansible 项目 )  
 
  
-###Docker Image Build  
+###    Docker Image Build  
 主要使用 Jinja2 模板生成 Dockerfile 文件。如果是源代码安装，还会把代码下载好。之后会通过Docker-py驱动Docker进行镜像构建。构建完成，还可以根据配置将镜像推送的指定的 Registry 服务器。  
 现在支持的不同的 Linux 发行版本 (Redhat 系和 Debian 系 ) 和不同的 OpenStack 安装包 ( 源代码和二进制包 )  
 下图是现在所有镜像的依赖关系。  
 
 ![依赖关系](/images/openstack-kolla/image-dependency-201512.png)
  
-###Ansible 部署
+###    Ansible 部署
 提供一个完整的Ansible Playbook，来部署Docker的镜像。并提供all-in-one和multihost的环境  
 使用到的技术Docker/LXC、Ansible、Python(docker-py、Jinja2)  
 
 
 
-##源码目录概要：
-ansible – Contains Ansible playbooks to deploy Kolla in Docker containers.  
+###    ansible – Contains Ansible playbooks to deploy Kolla in Docker containers.  
 demos – Contains a few demos to use with Kolla.  
 dev/heat – Contains an OpenStack-Heat based development environment.  
 dev/vagrant – Contains a vagrant VirtualBox/Libvirt based development environment.  
@@ -125,7 +124,7 @@ tools – Contains tools for interacting with Kolla.
 specs – Contains the Kolla communities key arguments about architectural shifts in the code base.  
 tests – Contains functional testing tools.  
 
-##setup.cfg入口文件
+###    setup.cfg入口文件
 <pre><code>
 [files]
 packages =      //包名
@@ -157,8 +156,8 @@ pbr.hooks.setup_hook
 </code></pre>
 
 
-##ansible包
-###ansible简介
+##   ansible包
+###    ansible简介
 ansible是个什么东西呢？官方的title是“Ansible is Simple IT Automation”——简单的自动化IT工具。这个工具的目标有这么几项：  
 自动化部署APP；自动化管理配置项；自动化的持续交互；自动化的（AWS）云服务管理。  
 所有的这几个目标从本质上来说都是在一个台或者几台服务器上，执行一系列的命令而已。通俗的说就是批量的在远程服务器上执行命令 。当然，最主要的是它是基于paramiko开发的。这个paramiko是什么呢？它是一个纯Python实现的ssh协议库。因此fabric和ansible还有一个共同点就是不需要在远程主机上安装client/agents，因为它们是基于ssh来和远程主机通讯的。简单归纳一下：  
@@ -222,7 +221,7 @@ Ansible代码包很庞大：这是因为OpenStack的服务的配置文件都在�
 │   └── site.yml
 </code></pre>
 
-####action_plugin中在merge_configs.py作用是导入template模板，并且run  
+####   action_plugin中在merge_configs.py作用是导入template模板，并且run  
 <pre><code>
   def read_config(self, source, inject, config):
         # 检查配置文件是否存在，并且读取配置信息
@@ -274,7 +273,7 @@ rabbitmq_port: "5672"
 enable_keystone: "yes"
 </code></pre>
 
-####在inventory文件夹中有all-in-one和multinode两个配置文件，这两个文件中的信息可以更改，从而部署符合需求的OpenStack环境，有点类似于DevStack中的local.conf  
+####    在inventory文件夹中有all-in-one和multinode两个配置文件，这两个文件中的信息可以更改，从而部署符合需求的OpenStack环境，有点类似于DevStack中的local.conf  
 截取其中一部分：  
 <pre><code>
 # 在multinode下需要根据实际生产环境配置hostname
@@ -293,7 +292,7 @@ nova
 nova
 </code></pre>
 
-####在library文件夹下的bslurp.py的作用是从其他node中gfetch文件然后再push到其他的node中  
+####    在library文件夹下的bslurp.py的作用是从其他node中gfetch文件然后再push到其他的node中  
 <pre><code>
 #从其他的node中拷贝
 def copy_from_host(module):
@@ -412,7 +411,7 @@ def start_container(self):
                 self.remove_container()
 </code></pre>
 
-####下面是roles文件夹，里面内容很庞大。里面是各种组件的yml的配置文件，如ceph,cinder,glance，nova,neutron等。我就neutron配置文件做一下分析。其他的应该是类似的。 
+####    下面是roles文件夹，里面内容很庞大。里面是各种组件的yml的配置文件，如ceph,cinder,glance，nova,neutron等。我就neutron配置文件做一下分析。其他的应该是类似的。 
 在这里Ansible使用Playbook，采用YAML语法结构，这些配置文件易于阅读并加以配置。通过playbook自动化了它的执行，这些playbook是指定要执行的每个任务和它们的属性的YAML文件。  
 Ansible还使用了清单(inventory)来将用户提供的主机映射到基础架构中的具体端点。不同于静态hosts文件，Ansible支持动态内容。内置的列表包含一个 Docker插件，该插件可查询Docker守护进程并向Ansible playbook共享大量信息。  
 
@@ -581,7 +580,7 @@ pull.yml则是对容器化后的OpenStack中的服务的镜像进行pull操作�
 register.yml则是完成组件在keystone上的注册操作  
 start.yml则是完成容器的开启配置  
 upgrade.yml则是完成容器的升级，include config.yml bootstarp_service.yml以及start.yml  
-###在templates文件夹下是jinjia2的模板文件  
+###    在templates文件夹下是jinjia2的模板文件  
 Jinja2是Python下一个被广泛应用的模版引擎，他的设计思想来源于Django的模板引擎，并扩展了其语法和一系列强大的功能。其中最显著的一个是增加了沙箱执行功能和可选的自动转义功能，这对大多应用的安全性来说是非常重要的。  
 他基于unicode并能在python2.4之后的版本运行，包括python3。  
 下面是neutron-l3-agent的配置模板  
@@ -617,7 +616,7 @@ Jinja2是Python下一个被广泛应用的模版引擎，他的设计思想来�
 }
 
 </code></pre>
-###已经完成的BluePrints:  
+###    已经完成的BluePrints:  
 2015/12废弃使用Ansible自带的 Docker module。使用自己实现的docker模块 (见REF1), 并已经完成了所有ansible roles的改造。主要原因是：  
 官方Docker module有bug(见REF2), 在docker 1.8.3及以上的版本工作不正常 , 而且进展缓慢。而Kolla使用的Docker版本只能锁定在 1.8.2，不能进行升级。  
 Ansible使用的是 GPL，而OpenStack项目使用的Apache License。不能直接修改 Ansible 的代码放到 Kolla 里使用。不想受限制于官方功能开发。有些想用的功能 (比方说新加进去的common_option, 官方是不会增加的)。  
@@ -627,7 +626,7 @@ Ansible使用的是 GPL，而OpenStack项目使用的Apache License。不能直�
 另一方面，Ubuntu 方面也正在积极的解决这个问题 (见REF4)。相信不久就会有升级的 playbook 基本完成(见REF8)  
 
 
-###近期规划
+###    近期规划
 拆分ansible部分到新的项目kolla-ansible。kolla项目只用来做docker images build.部署工作由kolla-ansible, kolla-mesos9等工具来实现。  
 
 
