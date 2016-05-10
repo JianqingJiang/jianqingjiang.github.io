@@ -165,7 +165,7 @@ Ansible工作机制
 Ansible 在管理节点将 Ansible 模块通过 SSH 协议（或者 Kerberos、LDAP）推送到被管理端执行，执行完之后自动删除，可以使用 SVN 等来管理自定义模块及编排    
 Ansible优点:  
 ansible在特性上似乎并不抢眼，配置管理方面（playbook）绝对比不过老大哥puppet，批量执行方面也只是多线程，不像saltstack那么高大上，不过ansible搜索热度高出saltstack三倍多，显然靠的不是吹牛，至少，ansible至少不会悄悄的丢机器，而且仅依赖ssh，与登录授权管理系统天然集成，简单即有效，没有比这更美妙的事情了。  
-![Ansible](/images/openstack-kolla/ansible.jpg)  
+![Ansible](/images/openstack-kolla/ansible.png)  
 由上面的图可以看到Ansible的组成由 5 个部分组成：  
 Ansible：核心  
 Modules：包括Ansible自带的核心模块及自定义模块  
