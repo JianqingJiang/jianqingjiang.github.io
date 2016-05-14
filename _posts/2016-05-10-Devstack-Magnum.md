@@ -5,9 +5,11 @@ description: "OpenStack Magnum是如何在DevStack中启动的"
 tags: [OpenStack]
 categories: [OpenStack]
 ---
-##什么是magnum?
+
+##    什么是magnum?
 Mangum现在应该是OpenStack里边比较热门的一个和Docker集成的新项目。Magnum是去年巴黎峰会后开始的一个新的专门针对Container的一个新项目，用来向用户提供容器服务。从去年11月份开始在stackforge提交第一个 patch，今年3月份进入OpenStack namespace，这个项目应该是OpenStack社区从stackforge迁移到OpenStack namespace最快的一个项目。Magnum现在可以为用户提供Kubernetes as a Service、Swarm as a Service和这几个平台集成的主要目的是能让用户可以很方便的通过OpenStack云平台来管理k8s，swarm，这些已经很成型的Docker集群管理系统，使用户很方便的使用这些容器管理系统来提供容器服务。  
-##使用devstack安装magnum
+
+##    使用devstack安装magnum
 magnum依赖于nova,glance,heat,barbican,neutron这些组件来模拟一个物理的环境，在裸机上部署magnum社区还在开发中  
 推荐使用Ubuntu14.04(Trusty)和Fedora 20/21  
 首先 Clone devstack  
@@ -20,12 +22,12 @@ git clone https://git.openstack.org/openstack-dev/devstack
 cd devstack
 cat > local.conf << END
 [[local|localrc]]
-# Modify to your environment
+ # Modify to your environment
 FLOATING_RANGE=192.168.1.224/27
 PUBLIC_NETWORK_GATEWAY=192.168.1.225
 PUBLIC_INTERFACE=em1
 
-# Credentials
+ # Credentials
 ADMIN_PASSWORD=password
 DATABASE_PASSWORD=password
 RABBIT_PASSWORD=password
@@ -34,8 +36,8 @@ SERVICE_TOKEN=password
 
 enable_service rabbit
 
-# Ensure we are using neutron networking rather than nova networking
-# (Neutron is enabled by default since Kilo)
+ # Ensure we are using neutron networking rather than nova networking
+ # (Neutron is enabled by default since Kilo)
 disable_service n-net
 enable_service q-svc
 enable_service q-agt
@@ -44,13 +46,13 @@ enable_service q-l3
 enable_service q-meta
 enable_service neutron
 
-# Enable heat services
+ # Enable heat services
 enable_service h-eng
 enable_service h-api
 enable_service h-api-cfn
 enable_service h-api-cw
 
-# Enable barbican services
+ # Enable barbican services
 enable_plugin barbican https://git.openstack.org/openstack/barbican
 
 FIXED_RANGE=10.0.0.0/24
@@ -62,7 +64,7 @@ TENANT_VLAN_RANGE=
 PHYSICAL_NETWORK=public
 OVS_PHYSICAL_BRIDGE=br-ex
 
-# Log all output to files
+ # Log all output to files
 LOGFILE=$HOME/logs/devstack.log
 SCREEN_LOGDIR=$HOME/logs
 
@@ -72,7 +74,7 @@ END
 创建local.sh，使的magnum能够使用devstack创建的网络  
 <pre><code>
 cat > local.sh << 'END_LOCAL_SH'
-#!/bin/sh
+ #!/bin/sh
 ROUTE_TO_INTERNET=$(ip route get 8.8.8.8)
 OBOUND_DEV=$(echo ${ROUTE_TO_INTERNET#*dev} | awk '{print $1}')
 sudo iptables -t nat -A POSTROUTING -o $OBOUND_DEV -j MASQUERADE
@@ -180,7 +182,8 @@ openstack endpoint create --region=RegionOne \
 magnum-api
 magnum-conductor
 </code></pre>
-##Magnum关于DevStack启动的代码解读  
+
+##    Magnum关于DevStack启动的代码解读  
 代码结构如下  
 ├── devstack  
 │   ├── lib  
