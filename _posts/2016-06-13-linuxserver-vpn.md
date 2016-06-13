@@ -19,7 +19,7 @@ chmod +x ./vpn_centos.sh
 ./vpn_centos.sh
 ```
 脚本代码如下
-<pre><code>
+```
 #!/bin/bash
 [ $(id -u) != "0" ] && { echo -e "\033[31mError: You must be root to run this script\033[0m"; exit 1; } 
 
@@ -127,20 +127,24 @@ echo -e "You can now connect to your VPN via your external IP \033[32m${VPN_IP}\
 echo -e "Username: \033[32m${VPN_USER}\033[0m"
 echo -e "Password: \033[32m${VPN_PASS}\033[0m"
 
-</code></pre>
+```
 执行结束后即安装完成  
-###    客户端
-```
-yum install pptp
-```
-```
-modprobe nf_conntrack_pptp
-```
-```
-echo '用户名 PPTP 密码 *' >> /etc/ppp/chap-secrets
-```
-在/etc/ppp/peers/目录下新疆一个文本（本文为linuxconfig）  
+###    客户端  
 
+```
+yum install pptp  
+```
+
+```
+modprobe nf_conntrack_pptp  
+```
+
+```
+echo '用户名 PPTP 密码 *' >> /etc/ppp/chap-secrets   
+```
+
+在/etc/ppp/peers/目录下新疆一个文本（本文为linuxconfig）  
+    
 ```
 pty "pptp 123.123.1.1(vps ip) --nolaunchpppd"
 name 用户名
