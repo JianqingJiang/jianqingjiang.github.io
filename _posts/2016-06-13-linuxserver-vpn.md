@@ -129,7 +129,11 @@ echo -e "Password: \033[32m${VPN_PASS}\033[0m"
 
 </code></pre>
 执行结束后即安装完成  
-###    客户端  
+
+
+###                                    客户端  
+
+
 
 在root权限下执行以下命令  
 <pre><code>
