@@ -3,7 +3,7 @@ layout: post
 title: 利用vps搭建pptp vpn用于linux server翻墙
 description: "利用vps搭建pptp vpn用于linux server翻墙"
 tags: [Linux]
-categories: [linux]
+categories: [Linux]
 ---
 
 ###    VPS
