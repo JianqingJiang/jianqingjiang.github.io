@@ -12,14 +12,14 @@ categories: [linux]
 我的环境：CentOS7（服务器端）
 
 ###    服务器端
-使用一键安装脚本
+使用一键安装脚本  
 ```
 wget http://mirrors.linuxeye.com/scripts/vpn_centos.sh
 chmod +x ./vpn_centos.sh
 ./vpn_centos.sh
 ```
-脚本代码如下
-```
+脚本代码如下  
+<pre><code>
 #!/bin/bash
 [ $(id -u) != "0" ] && { echo -e "\033[31mError: You must be root to run this script\033[0m"; exit 1; } 
 
@@ -127,25 +127,23 @@ echo -e "You can now connect to your VPN via your external IP \033[32m${VPN_IP}\
 echo -e "Username: \033[32m${VPN_USER}\033[0m"
 echo -e "Password: \033[32m${VPN_PASS}\033[0m"
 
-```
+</code></pre>
 执行结束后即安装完成  
-###    客户端  
+###           客户端  
 
-```
+<pre><code>
 yum install pptp  
-```
-
-```
+</code></pre>
+<pre><code>
 modprobe nf_conntrack_pptp  
-```
-
-```
+</code></pre>
+<pre><code>
 echo '用户名 PPTP 密码 *' >> /etc/ppp/chap-secrets   
-```
+</code></pre>
 
 在/etc/ppp/peers/目录下新疆一个文本（本文为linuxconfig）  
     
-```
+<pre><code>
 pty "pptp 123.123.1.1(vps ip) --nolaunchpppd"
 name 用户名
 password 密码
@@ -153,24 +151,25 @@ remotename PPTP
 require-mppe-128
 file /etc/ppp/options.pptp
 ipparam linuxconfig
-```
+</code></pre>
 
 连接VPN  
 
-```
+<pre><code>
 pppd call linuxconfig
-```
+</code></pre>
 断开VPN  
 
-```
+<pre><code>
 pkill pppd
-```
+</code></pre>
+PS:  
 log在/var/log/messages目录下  
 可以看到ip a显示下多了一个ppp0接口（如果这个接口时down的则重复尝试断开和连接步骤）  
-####配置路由  
-```
+###                        配置路由  
+<pre><code>
 ip route add default dev ppp0
-```
+</code></pre>
 这样所有流量全部由VPN转发  
 可以使用curl www.google.com测试VPN是否生效  
 
