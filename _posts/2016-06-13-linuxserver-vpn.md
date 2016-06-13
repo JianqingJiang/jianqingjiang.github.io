@@ -2,7 +2,7 @@
 layout: post
 title: 利用vps搭建pptp vpn用于linux server翻墙
 description: "利用vps搭建pptp vpn用于linux server翻墙"
-tags: [linux]
+tags: [Linux]
 categories: [linux]
 ---
 
@@ -13,11 +13,11 @@ categories: [linux]
 
 ###    服务器端
 使用一键安装脚本  
-```
+<pre><code>
 wget http://mirrors.linuxeye.com/scripts/vpn_centos.sh
 chmod +x ./vpn_centos.sh
 ./vpn_centos.sh
-```
+</code></pre>
 脚本代码如下  
 <pre><code>
 #!/bin/bash
@@ -129,15 +129,11 @@ echo -e "Password: \033[32m${VPN_PASS}\033[0m"
 
 </code></pre>
 执行结束后即安装完成  
-###           客户端  
-
+###    客户端 
+在root权限下执行以下命令  
 <pre><code>
 yum install pptp  
-</code></pre>
-<pre><code>
 modprobe nf_conntrack_pptp  
-</code></pre>
-<pre><code>
 echo '用户名 PPTP 密码 *' >> /etc/ppp/chap-secrets   
 </code></pre>
 
@@ -166,7 +162,7 @@ pkill pppd
 PS:  
 log在/var/log/messages目录下  
 可以看到ip a显示下多了一个ppp0接口（如果这个接口时down的则重复尝试断开和连接步骤）  
-###                        配置路由  
+###    配置路由  
 <pre><code>
 ip route add default dev ppp0
 </code></pre>
