@@ -129,7 +129,8 @@ echo -e "Password: \033[32m${VPN_PASS}\033[0m"
 
 </code></pre>
 执行结束后即安装完成  
-###    客户端 
+###    客户端  
+
 在root权限下执行以下命令  
 <pre><code>
 yum install pptp  
@@ -137,7 +138,7 @@ modprobe nf_conntrack_pptp
 echo '用户名 PPTP 密码 *' >> /etc/ppp/chap-secrets   
 </code></pre>
 
-在/etc/ppp/peers/目录下新疆一个文本（本文为linuxconfig）  
+在/etc/ppp/peers/目录下新建一个文本，拷贝下面文本（本文为linuxconfig）  
     
 <pre><code>
 pty "pptp 123.123.1.1(vps ip) --nolaunchpppd"
@@ -162,7 +163,7 @@ pkill pppd
 PS:  
 log在/var/log/messages目录下  
 可以看到ip a显示下多了一个ppp0接口（如果这个接口时down的则重复尝试断开和连接步骤）  
-###    配置路由  
+配置路由  
 <pre><code>
 ip route add default dev ppp0
 </code></pre>
