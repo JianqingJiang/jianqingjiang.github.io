@@ -12,8 +12,12 @@ categories: [OpenStack]
 ###    自动化
 开发shell脚本（dialog）实现自动化  
 ![curl](/images/openstack_bare_mutinode_install/1.png)  
+选择菜单  
 ![curl](/images/openstack_bare_mutinode_install/2.png)  
+自动化感知网卡
 ![curl](/images/openstack_bare_mutinode_install/3.png)  
+配置网卡  
 ![curl](/images/openstack_bare_mutinode_install/4.png)  
+进行安装  
 ![curl](/images/openstack_bare_mutinode_install/5.png)  
 ps:此方案经验证  
