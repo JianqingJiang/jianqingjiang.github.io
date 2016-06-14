@@ -10,14 +10,20 @@ categories: [OpenStack]
 按照步骤完成OpenStack部署。加入一块硬盘，使用Linux dd命令把OpenStack的节点拷贝到硬盘中，可用gzip压缩，利用liveCD和分区对拷的方式使裸机启动，利用lvm进行硬盘调整。
 
 ###    自动化
-开发shell脚本（dialog）实现自动化  
+
+
+#### 开发shell脚本（dialog）实现自动化  
 ![curl](/images/openstack_bare_mutinode_install/1.png)  
-选择菜单  
+
+####  选择菜单  
 ![curl](/images/openstack_bare_mutinode_install/2.png)  
-自动化感知网卡
+
+#### 自动化感知网卡  
 ![curl](/images/openstack_bare_mutinode_install/3.png)  
-配置网卡  
+
+#### 配置网卡  
 ![curl](/images/openstack_bare_mutinode_install/4.png)  
-进行安装  
+
+#### 进行安装  
 ![curl](/images/openstack_bare_mutinode_install/5.png)  
 ps:此方案经验证  
