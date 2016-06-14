@@ -17,5 +17,5 @@ Homepage:www.jqjiang.com
 
 # Education background
 
-* Wenzhou University(2012-2016)
+* Wenzhou University(2012-2016)  
       * B.E Network Engineering
