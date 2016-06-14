@@ -17,7 +17,7 @@ Homepage:www.jqjiang.com
 
 # Education background
 
-* ###Wenzhou University(2012-2016)  
+* ###  Wenzhou University(2012-2016)  
 *  B.E Network Engineering
   
 
@@ -56,13 +56,13 @@ Homepage:www.jqjiang.com
 * Second: English(CET-6)
 
 
-#Award 
+# Award 
 * Obtain national Lanqiao Cup Java programing second class prize;
 * Obtain Zhejiang province Lanqiao Cup Java programing first class prize;
 * Obtian excellent student cadre in college;
 * Obian C-programing third class prize in college;
 
-#Certificate
+# Certificate
 * CCNA（Cisco Certified Network Associate）
 * SCPT（Spirent Certified Performance Tester）
 * National software talent JAVA Advanced Certificate
