@@ -21,7 +21,7 @@ menu:
   - title: 'GitHub'
     url: 'https://github.com/JianqingJiang'
   - title: 'About'
-    url: '/about/'
+    url: '/theme-setup/'
   - title: 'Tags'
     url: '/tags'
   - title: 'Categories'
