@@ -17,5 +17,15 @@ Homepage:www.jqjiang.com
 
 # Education background
 
-* Wenzhou University(2012-2016)  
-      * B.E Network Engineering
+* ###Wenzhou University(2012-2016)  
+*  B.E Network Engineering
+  
+
+#  Project Experience
+
+* ###Shanghai Engineering Research Center for Broadband Networks and Applications
+*  ###### Configure and maintain OpenStack 
+*  ###### Dev shell script to make OpenStack install automatically
+*  ###### Work on DCFabric: An Open Source SDN Controller for Cloud Computing Data  Centers 
+*   ######Replace OpenStack neutron with SDN controller DCFabric
+
