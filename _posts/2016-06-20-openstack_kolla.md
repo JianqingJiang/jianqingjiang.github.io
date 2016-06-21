@@ -8,7 +8,7 @@ categories: [OpenStack]
 
 ###    购买国外vps
 由于kolla中的image太庞大了，超过10G。而且存放镜像的国外服务器会被block掉，之前试了使用vps搭建pptp的VPN，但是速度只有小几百k。网络出现波动还会断开连接...  
-所以建议购买比较高性能的vps，在vps中下载好然后再拉回本地。之前购买了1G内存，20G硬盘的阿里北美vps,可惜由于性能原因，下载过程中导致了vps宕机。我查了半天错，以为是Kolla本事的问题。于是我购买了digitalocean的vps，选择2G内存，40G硬盘。可以按小时计费，这点比较好。   
+所以建议购买比较高性能的vps，在vps中下载好然后再拉回本地。之前购买了1G内存，20G硬盘的阿里北美vps,可惜由于性能原因，下载过程中导致了vps宕机。我查了半天错，以为是Kolla本身的问题。于是我购买了digitalocean的vps，选择2G内存，40G硬盘。可以按小时计费，这点比较好。   
 ![vps](/images/openstack_kolla/1.png)
 
 
