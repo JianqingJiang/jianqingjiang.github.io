@@ -66,7 +66,9 @@ systemctl enable docker
 systemctl start docker
 ```
 
-###下载 Kolla 代码并安装依赖
+
+
+###  下载 Kolla 代码并安装依赖
 
 ```
 git clone https://github.com/openstack/kolla.git
@@ -141,16 +143,14 @@ bnc:bnc
 如果开启了iptables防火墙，请将873端口加入防火墙允许规则
 
 
-```iptables -I INPUT -p tcp --dport 873 -j ACCEPTiptables -I OUTPUT -p tcp --sport 873 -j ACCEPT
-```
+```iptables -I INPUT -p tcp --dport 873 -j ACCEPTiptables -I OUTPUT -p tcp --sport 873 -j ACCEPT```
 遇到报错
 
-```rsync error: error starting client-server protocol (code 5) at main.c(1516) [Receiver=3.0.9]原因及解决办法：    SELinux；（下面这条命令在服务器端执行）    setsebool -P rsync_disable_trans on
-```
+```rsync error: error starting client-server protocol (code 5) at main.c(1516) [Receiver=3.0.9]原因及解决办法：    SELinux；（下面这条命令在服务器端执行）    setsebool -P rsync_disable_trans on```
 最后拷贝image到本地成功，速度也OK  
 ![copy](/images/openstack_kolla/3.png)
 
-###常见问题
+###  常见问题
 
 今天Kolla镜像又下载不了了。以为是网络问题。进入openstack-kolla的irc聊天组。大牛基本都在这里聊天，发现有公告  
 
