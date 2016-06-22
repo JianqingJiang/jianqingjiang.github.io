@@ -6,7 +6,7 @@ tags: [OpenStack]
 categories: [OpenStack]
 ---
 
-###    购买国外vps
+##    购买国外vps
 由于kolla中的image太庞大了，超过10G。而且存放镜像的国外服务器会被block掉，之前试了使用vps搭建pptp的VPN，但是速度只有小几百k。网络出现波动还会断开连接...  
 所以建议购买比较高性能的vps，在vps中下载好然后再拉回本地。之前购买了1G内存，20G硬盘的阿里北美vps,可惜由于性能原因，下载过程中导致了vps宕机。我查了半天错，以为是Kolla本身的问题。于是我购买了digitalocean的vps，选择2G内存，40G硬盘。可以按小时计费，这点比较好。   
 ![vps](/images/openstack_kolla/1.png)
@@ -15,7 +15,7 @@ vps的带宽和CPU使用情况
 
 ![vps](/images/openstack_kolla/5.png)
 
-###   开始部署
+##   开始
 
 Kolla 依赖于以下几个主要组件
 
@@ -122,7 +122,7 @@ git checkout origin/stable/mitaka
 
 
 
-###  保存image
+###  docker save image
 
 由于Kolla的image数量太多，一个个保存太耗费时间，于是就写了个shell脚本
 
@@ -169,7 +169,91 @@ bnc:bnc
 rsync -vzrtopg --progress -e ssh --delete root@45.55.240.159:/home/lokolla /home
 ```
 ![copy](/images/openstack_kolla/3.png)
-
+###  docker load image
+
+docker的镜像被拷贝回本地了。接下去就是把image load回来  
+
+同样，也写了shell脚本  
+
+```
+#!/bin/sh#============ get the file name ===========Folder_A="/home/lokolla"for file_a in ${Folder_A}/*; do    temp_file=`basename $file_a`#   echo $temp_filedocker load < /home/lokolla/$temp_fileecho okdoneecho finish
+```![iamge](/images/openstack_kolla/2.png)
+
+然后docker images一下就发现镜像都OK了  
+
+
+## 部署
+
+
+###   globals.yml
+依然是先修改配置文件，与 Deploy 相关的主要是两个配置文件 /etc/kolla/passwords.yml 和 /etc/kolla/globals.yml。他们为 ansible 提供一些变量的设定。主要需要修改的是 globals.yml 文件。修改后，其主要内容为 :
+
+
+```
+config_strategy: "COPY_ALWAYS"
+kolla_base_distro: "centos"
+kolla_install_type: "source"
+kolla_internal_address: "10.2.0.254"
+network_interface: "eth0"
+neutron_external_interface: "eth1"
+openstack_logging_debug: "true"
+enable_cinder: "no"
+enable_heat: "no"
+```
+
+
+###   passwords.yml
+
+
+这个密码文件可以使用工具自动生成，也可以手动输入  
+但是手动输入需要注意格式，在：后需要空一格再输入；而且ssh_key也比较麻烦  
+所以推荐使用工具自动生成  
+但是直接输入  
+
+```
+kolla-genpwd
+```
+会提示找不到此命令。这也是官方文档坑的地方，改为：  
+
+```
+./root/kolla/.tox/genconfig/bin/kolla-genpwd
+```
+
+
+
+###  prechecks
+
+kolla 使用一个名为 kolla-ansible 的封装脚本，可以使用 
+
+```
+./tools/kolla-ansible prechecks 
+```
+来检查一个机器是否满足安装条件。
+
+precheck在其他地方都没什么问题,在IP上会进行下面两步检查，这个IP需要是node之间同一网段的，并且还需要不能被使用的IP地址  
+
+```
+TASK [prechecks : Checking if kolla_internal_vip_address and kolla_external_vip_address are not pingable from any node] 
+TASK [prechecks : Checking if kolla_internal_vip_address is in the same network as network_interface on all nodes]
+```
+
+###  deploy
+
+
+使用 
+
+```
+./tools/kolla-ansible deploy
+```
+
+ 来开始正式安装。
+ 
+ ```
+ Unknown error message: Tag 2.0.2 not found in repository docker.io/kollaglue/centos-source-heka
+ ```
+
+
+
 ###  常见问题
 
 今天Kolla镜像又下载不了了。以为是网络问题。进入openstack-kolla的irc聊天组。大牛基本都在这里聊天，发现有公告  
