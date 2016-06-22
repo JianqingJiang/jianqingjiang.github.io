@@ -11,7 +11,9 @@ categories: [OpenStack]
 所以建议购买比较高性能的vps，在vps中下载好然后再拉回本地。之前购买了1G内存，20G硬盘的阿里北美vps,可惜由于性能原因，下载过程中导致了vps宕机。我查了半天错，以为是Kolla本身的问题。于是我购买了digitalocean的vps，选择2G内存，40G硬盘。可以按小时计费，这点比较好。   
 ![vps](/images/openstack_kolla/1.png)
 
+vps的带宽和CPU使用情况  
 
+![vps](/images/openstack_kolla/5.png)
 
 ###   开始部署
 
@@ -73,6 +75,7 @@ systemctl start docker
 ```
 git clone https://github.com/openstack/kolla.git
 cd kolla
+yum install python-devel
 pip install -r requirements.txt -r test-requirements.txt tox
 ```
 
@@ -93,7 +96,7 @@ cp -rv etc/kolla /etc/
 ```
 [DEFAULT]
 base = centos
-install_type = soruce
+install_type = source
 namespace = lokolla
 push = false
 ```
@@ -114,6 +117,18 @@ git checkout origin/stable/mitaka
 所有image全部下载完成之后如图  
 
 ![iamge](/images/openstack_kolla/2.png)
+
+
+
+###  保存image
+
+由于Kolla的image数量太多，一个个保存太耗费时间，于是就写了个shell脚本
+
+
+```
+docker images > /root/kolla/images.txtawk '{print $1}' /root/kolla/images.txt > /root/kolla/images_cut.txtwhile read LINEdo#echo $LINEdocker save $LINE > /home/$LINE.tarecho okdone < /root/kolla/images_cut.txtecho finish
+```
+
 
 ### 使用rsync拷贝到本地
 
@@ -148,6 +163,9 @@ bnc:bnc
 
 ```rsync error: error starting client-server protocol (code 5) at main.c(1516) [Receiver=3.0.9]原因及解决办法：    SELinux；（下面这条命令在服务器端执行）    setsebool -P rsync_disable_trans on```
 最后拷贝image到本地成功，速度也OK  
+```
+rsync -vzrtopg --progress -e ssh --delete root@45.55.240.159:/home/lokolla /home
+```
 ![copy](/images/openstack_kolla/3.png)
 
 ###  常见问题
