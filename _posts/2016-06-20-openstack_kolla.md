@@ -31,17 +31,19 @@ Kolla 依赖于以下几个主要组件
 * Kolla master 分支上使用的是 RDO master 上的源，打包极不稳定，时常会有 Bug 出现。所以本文使用的是 CentOS + 源码的安装方式
 
 ###  加入 Docker 的源
+
 ```
-	sudo tee /etc/yum.repos.d/docker.repo << 'EOF'
-	[dockerrepo]
-	name=Docker Repository
-	baseurl=https://yum.dockerproject.org/repo/main/centos/$releasever/
-	enabled=1
-	gpgcheck=1
-	gpgkey=https://yum.dockerproject.org/gpg
-	EOF
-	加入 EPEL 源
+sudo tee /etc/yum.repos.d/docker.repo << 'EOF'
+[dockerrepo]
+name=Docker Repository
+baseurl=https://yum.dockerproject.org/repo/main/centos/$releasever/
+enabled=1
+gpgcheck=1
+gpgkey=https://yum.dockerproject.org/gpg
+EOF
 ```
+
+加入 EPEL 源
 
 
 ```
