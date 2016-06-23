@@ -249,7 +249,7 @@ TASK [prechecks : Checking if kolla_internal_vip_address is in the same network 
  来开始正式安装。
  
  ```
- Unknown error message: Tag 2.0.2 not found in repository docker.io/kollaglue/centos-source-heka
+Unknown error message: Tag 2.0.2 not found in repository docker.io/kollaglue/centos-source-heka
  ```
 
 
