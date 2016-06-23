@@ -248,9 +248,10 @@ TASK [prechecks : Checking if kolla_internal_vip_address is in the same network 
 
  来开始正式安装。
  
- ```
+
+```
 Unknown error message: Tag 2.0.2 not found in repository docker.io/kollaglue/centos-source-heka
- ```
+```
 
 
 
@@ -258,8 +259,11 @@ Unknown error message: Tag 2.0.2 not found in repository docker.io/kollaglue/cen
 
 今天Kolla镜像又下载不了了。以为是网络问题。进入openstack-kolla的irc聊天组。大牛基本都在这里聊天，发现有公告  
 
+
 ```
 static.openstack.org (which hosts logs.openstack.org and tarballs.openstack.org among others) is currently being rebuilt. As jobs can not upload logs they are failing with POST_FAILURE. This should be resolved soon. Please do not recheck until then.
 ```
+
+
 
 原来是服务器正在重建。  
