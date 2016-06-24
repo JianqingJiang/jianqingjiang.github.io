@@ -15,7 +15,7 @@ vps的带宽和CPU使用情况
 
 ![vps](/images/openstack_kolla/5.png)
 
-##   开始
+#   build image
 
 Kolla 依赖于以下几个主要组件
 
@@ -182,7 +182,7 @@ docker的镜像被拷贝回本地了。接下去就是把image load回来
 然后docker images一下就发现镜像都OK了  
 
 
-## 部署
+# run container
 
 
 ###   globals.yml
@@ -237,7 +237,7 @@ TASK [prechecks : Checking if kolla_internal_vip_address and kolla_external_vip_
 TASK [prechecks : Checking if kolla_internal_vip_address is in the same network as network_interface on all nodes]
 ```
 
-##  Deploy部署容器
+##  Deploy部署
 
 
 使用 
@@ -250,6 +250,8 @@ TASK [prechecks : Checking if kolla_internal_vip_address is in the same network 
  
 
 在deploy中，Kolla返回这个log，提示需要在外部的registry。但是all-in-one的安装并不需要registry，这个bother了我很久  
+我在社区反馈了个bug  
+[https://bugs.launchpad.net/kolla/+bug/1595128](https://bugs.launchpad.net/kolla/+bug/1595128 "https://bugs.launchpad.net/kolla/+bug/1595128")
 
 ```
 Unknown error message: Tag 2.0.2 not found in repository docker.io/kollaglue/centos-source-heka
@@ -270,7 +272,7 @@ namespace = lokolla
 docker_registry: "localhost:4000"
 openstack_release: "latest"
 ```
-###搭建本地registry
+###  搭建本地registry
 
 ```
 docker run -d -p 4000:5000 --restart=always --name registry registry:2
@@ -316,7 +318,7 @@ systemctl start docker
 
 ![registry](/images/openstack_kolla/8.png)
 
-停止registry
+停止registry的命令
 
 ```
 docker stop registry && docker rm -v registry
@@ -333,7 +335,8 @@ docker images > /root/kolla/images.txtwhile read LINEdoecho $LINE > /root/kol
 最后container全部up起来  
 ![registry](/images/openstack_kolla/7.png)
 在浏览器上输入kolla_internal_address: "192.168.52.197"  域default，用户名密码在/etc/kolla/admin-openrc.sh中  登陆后的界面如下  
-![registry](/images/openstack_kolla/9.png)这样就成功了，不过接下去还有很多“坑要踩”，趁着kolla项目代码量没上去还是值得好好研究一下的。
+![registry](/images/openstack_kolla/9.png)这样就成功了，不过接下去还有很多“坑要踩”，趁着kolla项目代码量没上去还是值得好好研究一下的。容器化已经势不可挡了。
+
 ###  常见问题
 
 * 今天Kolla镜像又下载不了了。以为是网络问题。进入openstack-kolla的irc聊天组。大牛基本都在这里聊天，发现有公告，原来是服务器正在重建。  
@@ -357,6 +360,8 @@ TASK: [rabbitmq | fail msg="Hostname has to resolve to IP address of api_interfa
 yum install net-tools
 netstat -apn|grep 5000(端口号)
 ```
+
+
 ### 工具
 在/root/kolla的目录下有几个工具,可以在你deploy到一半中断的时候把本机环境清理一下
 ```
