@@ -177,7 +177,7 @@ docker的镜像被拷贝回本地了。接下去就是把image load回来
 
 ```
 #!/bin/sh#============ get the file name ===========Folder_A="/home/lokolla"for file_a in ${Folder_A}/*; do    temp_file=`basename $file_a`#   echo $temp_filedocker load < /home/lokolla/$temp_fileecho okdoneecho finish
-```![iamge](/images/openstack_kolla/2.png)
+```![image](/images/openstack_kolla/2.png)
 
 然后docker images一下就发现镜像都OK了  
 
@@ -237,7 +237,7 @@ TASK [prechecks : Checking if kolla_internal_vip_address and kolla_external_vip_
 TASK [prechecks : Checking if kolla_internal_vip_address is in the same network as network_interface on all nodes]
 ```
 
-###  deploy
+##  Deploy部署容器
 
 
 使用 
@@ -249,15 +249,94 @@ TASK [prechecks : Checking if kolla_internal_vip_address is in the same network 
  来开始正式安装。
  
 
+在deploy中，Kolla返回这个log，提示需要在外部的registry。但是all-in-one的安装并不需要registry，这个bother了我很久  
+
 ```
 Unknown error message: Tag 2.0.2 not found in repository docker.io/kollaglue/centos-source-heka
 ```
+思路如下：那么我在本地自建一个registry，把下载好的image全部pull到本地的registry。然后把Kolla的外部registry指向我本地的registry  
+
+奇怪的是，这个path貌似改不了，比如下载好的image tag是lokolla，这边查找的tag是kollaglue。即使我在/etc/kolla/kolla-build.conf中已经
+
+```
+[DEFAULT]
+namespace = lokolla
+```
+这样编辑了
+
+为了指向我的本地registry，在/etc/kolla/kolla-build.conf添加下面的条目
+
+```
+docker_registry: "localhost:4000"
+openstack_release: "latest"
+```
+###搭建本地registry
+
+```
+docker run -d -p 4000:5000 --restart=always --name registry registry:2
+```
+注意：kolla使用了4000端口   
+Kolla looks for the Docker registry to use port 4000. (Docker default is port 5000)  
+docker 暴露registry端口的方式  
+
+```
+EXPOSE (incoming ports)　　Dockefile在网络方面除了提供一个EXPOSE之外，没有提供其它选项。下面这些参数可以覆盖Dockefile的expose默认值：	--expose=[]: Expose a port or a range of ports from the container            without publishing it to your host	-P=false   : Publish all exposed ports to the host interfaces	-p=[]      : Publish a container᾿s port to the host (format:             ip:hostPort:containerPort | ip::containerPort |             hostPort:containerPort | containerPort)             (use 'docker port' to see the actual mapping)	--link=""  : Add link to another container (name:alias)    --expose可以让container接受外部传入的数据。container内监听的port不需要和外部host的port相同。比如说在container内部，一个HTTP服务监听在80端口，对应外部host的port就可能是49880.　　操作人员可以使用--expose，让新的container访问到这个container。具体有三个方式：　　1. 使用-p来启动container。　　2. 使用-P来启动container。　　3. 使用--link来启动container。　　如果使用-p或者-P，那么container会开发部分端口到host，只要对方可以连接到host，就可以连接到container内部。当使用-P时，docker会在host中随机从49153 和65535之间查找一个未被占用的端口绑定到container。你可以使用docker port来查找这个随机绑定端口。　　当你使用--link方式时，作为客户端的container可以通过私有网络形式访问到这个container。同时Docker会在客户端的container中设定一些环境变量来记录绑定的IP和PORT。
+```
+
+编辑 /etc/sysconfig/docker  
+
+```
+# CentOS
+other_args="--insecure-registry 192.168.1.100:4000"
+```
+
+编辑 /etc/systemd/system/docker.service.d/kolla.conf
 
 
+```
+# CentOS
+[Service]
+EnvironmentFile=/etc/sysconfig/docker
+# It's necessary to clear ExecStart before attempting to override it
+# or systemd will complain that it is defined more than once.
+ExecStart=
+ExecStart=/usr/bin/docker daemon -H fd:// $other_args
+```
 
+重启docker  
+
+```
+# CentOS
+systemctl daemon-reload
+systemctl stop docker
+systemctl start docker
+```
+
+在本地的registry如图所示  
+
+![registry](/images/openstack_kolla/8.png)
+
+停止registry
+
+```
+docker stop registry && docker rm -v registry
+```
+
+写了shell脚本自动化把image push到docker仓库（registry）中，为了满足报错的log，并进行了tag的转换（lokolla->kollaglue）
+
+```
+docker images > /root/kolla/images.txtwhile read LINEdoecho $LINE > /root/kolla/meta.txtawk '{print $1}' /root/kolla/meta.txt > /root/kolla/images_1.txtawk '{print $3}' /root/kolla/meta.txt > /root/kolla/images_3.txtstr=$(cat /root/kolla/images_1.txt)echo /kollaglue/${str#*/} > /root/kolla/images_1_new.txtdocker tag $(cat /root/kolla/images_3.txt) localhost:4000$(cat /root/kolla/images_1_new.txt)echo tag okdocker push localhost:4000$(cat /root/kolla/images_1_new.txt)echo push ok#echo $(cat /root/kolla/images_3.txt)#echo $(cat /root/kolla/images_1.txt)#echo $(cat /root/kolla/images_1_new.txt)done < /root/kolla/images.txtecho finish
+```
+
+重新使用 ./tools/kolla-ansible deploy 来开始正式安装。  
+使用 ./tools/kolla-ansible post-deploy 来生成 /etc/kolla/admin-openrc.sh 文件用来加载认证变量。
+最后container全部up起来  
+![registry](/images/openstack_kolla/7.png)
+在浏览器上输入kolla_internal_address: "192.168.52.197"  域default，用户名密码在/etc/kolla/admin-openrc.sh中  登陆后的界面如下  
+![registry](/images/openstack_kolla/9.png)这样就成功了，不过接下去还有很多“坑要踩”，趁着kolla项目代码量没上去还是值得好好研究一下的。
 ###  常见问题
 
-今天Kolla镜像又下载不了了。以为是网络问题。进入openstack-kolla的irc聊天组。大牛基本都在这里聊天，发现有公告  
+* 今天Kolla镜像又下载不了了。以为是网络问题。进入openstack-kolla的irc聊天组。大牛基本都在这里聊天，发现有公告，原来是服务器正在重建。  
 
 
 ```
@@ -266,4 +345,30 @@ static.openstack.org (which hosts logs.openstack.org and tarballs.openstack.org 
 
 
 
-原来是服务器正在重建。  
+* 如果在deploy中出现这个问题。在/etc/hosts中加入"127.0.0.1  localhost"即可  
+
+```
+TASK: [rabbitmq | fail msg="Hostname has to resolve to IP address of api_interface"] ***failed: [localhost] => (item={'cmd': ['getent', 'ahostsv4', 'localhost'], 'end': '2016-06-24 04:51:39.738725', 'stderr': u'', 'stdout': '127.0.0.1       STREAM localhost\n127.0.0.1       DGRAM  \n127.0.0.1       RAW    \n127.0.0.1       STREAM \n127.0.0.1       DGRAM  \n127.0.0.1       RAW    ', 'changed': False, 'rc': 0, 'item': 'localhost', 'warnings': [], 'delta': '0:00:00.033351', 'invocation': {'module_name': u'command', 'module_complex_args': {}, 'module_args': u'getent ahostsv4 localhost'}, 'stdout_lines': ['127.0.0.1       STREAM localhost', '127.0.0.1       DGRAM  ', '127.0.0.1       RAW    ', '127.0.0.1       STREAM ', '127.0.0.1       DGRAM  ', '127.0.0.1       RAW    '], 'start': '2016-06-24 04:51:39.705374'}) => {"failed": true, "item": {"changed": false, "cmd": ["getent", "ahostsv4", "localhost"], "delta": "0:00:00.033351", "end": "2016-06-24 04:51:39.738725", "invocation": {"module_args": "getent ahostsv4 localhost", "module_complex_args": {}, "module_name": "command"}, "item": "localhost", "rc": 0, "start": "2016-06-24 04:51:39.705374", "stderr": "", "stdout": "127.0.0.1       STREAM localhost\n127.0.0.1       DGRAM  \n127.0.0.1       RAW    \n127.0.0.1       STREAM \n127.0.0.1       DGRAM  \n127.0.0.1       RAW    ", "stdout_lines": ["127.0.0.1       STREAM localhost", "127.0.0.1       DGRAM  ", "127.0.0.1       RAW    ", "127.0.0.1       STREAM ", "127.0.0.1       DGRAM  ", "127.0.0.1       RAW    "], "warnings": []}}msg: Hostname has to resolve to IP address of api_interfaceFATAL: all hosts have already failed -- abortingPLAY RECAP ********************************************************************           to retry, use: --limit @/root/site.retrylocalhost                  : ok=87   changed=24   unreachable=0    failed=1
+```
+  
+* 有时端口号可能被占用也会在precheck中提示，通过端口号找到进程之后就可以用kill －9来杀死了  
+
+```
+yum install net-tools
+netstat -apn|grep 5000(端口号)
+```
+### 工具
+在/root/kolla的目录下有几个工具,可以在你deploy到一半中断的时候把本机环境清理一下
+```
+tools/cleanup-containers
+tools/cleanup-host
+#有时需要配合这两个命令：
+docker kill $(docker ps -a -q) //杀死所有正在运行的containner
+docker rm $(docker ps -a -q)   //删除已经被杀死的container
+```  ###  版本变动
+
+官网上说现在ansible版本>2.0也OK，但是我实际操作的时候首先precheck这里提示错误，deploy的时候也出错```
+Some implemented distro versions of Ansible are too old to use distro packaging. Currently, CentOS and RHEL package Ansible >2.0 which is suitable for use with Kolla. Note that you will need to enable access to the EPEL repository to install via yum – to do so, take a look at Fedora’s EPEL docs and FAQ.
+```
+
+
