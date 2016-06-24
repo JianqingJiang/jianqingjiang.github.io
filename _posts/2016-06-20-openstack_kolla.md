@@ -272,6 +272,8 @@ namespace = lokolla
 docker_registry: "localhost:4000"
 openstack_release: "latest"
 ```
+
+
 ###  搭建本地registry
 
 ```
