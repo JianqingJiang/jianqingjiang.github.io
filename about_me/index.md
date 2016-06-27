@@ -13,7 +13,7 @@ Email:jqjiang.1@gmail.com
 
 [Github:https://github.com/JianqingJiang](https://github.com/JianqingJiang "github")
 
-[Homepage:www.jqjiang.com](http://www.jqjiang.com "homepage")
+[Homepage:jqjiang.com](http://jqjiang.com "homepage")
 
 ---
 
@@ -26,7 +26,7 @@ Email:jqjiang.1@gmail.com
 #  Project Experience
 
 
-*   ### Shanghai Engineering Research Center for Broadband Networks and Applications(2015/12-Present)
+*   ### Shanghai Engineering Research Center for Broadband Networks and Applications (2015/12-Present)
 *   Configure and maintain OpenStack 
 *   Dev shell script to make OpenStack install automatically
 *   Work on DCFabric: An Open Source SDN Controller for Cloud Computing Data  Centers 
@@ -34,7 +34,7 @@ Email:jqjiang.1@gmail.com
 
 
 
-*  ### Spirent Communications(2015/7-2015/12)
+*  ### Spirent Communications (2015/7-2015/12)
 
 *  Response for IaaS compute Management and network Management
 *  Response for SDN architecture analysis and design，technical project research
@@ -42,7 +42,7 @@ Email:jqjiang.1@gmail.com
 *   Response for cloud computing project solution and deployment，especially for network solutions
 *   Openstack Nova, Neutron, Cinder, Swift deploy
 
-*  ### Shanghai Tianyou Network Company(2014/7-2014/8)
+*  ### Shanghai Tianyou Network Company (2014/7-2014/8)
 *  Response to solve the network problem for customer
 *  Response to design and deply wireless AP for customer
 *  Divide vlan for custromer’s network center
@@ -88,7 +88,7 @@ Email:jqjiang.1@gmail.com
 
 [Github:https://github.com/JianqingJiang](https://github.com/JianqingJiang "github")
 
-[Homepage:www.jqjiang.com](http://www.jqjiang.com "homepage")
+[Homepage:jqjiang.com](http://jqjiang.com "homepage")
 
 ---
 
@@ -101,7 +101,7 @@ Email:jqjiang.1@gmail.com
 #  项目经验
 
 
-*   ### 上海宽带技术及应用工程研究中心(2015/12-Present)
+*   ### 上海宽带技术及应用工程研究中心 (2015/12-Present)
 *   配置维护OpenStack 
 *   开发shell脚本自动化部署OpenStack
 *   开发部署DCFabric: An Open Source SDN Controller for Cloud Computing Data  Centers 
@@ -109,7 +109,7 @@ Email:jqjiang.1@gmail.com
 
 
 
-*  ### 思博伦通信(2015/7-2015/12)
+*  ### 思博伦通信科技(北京)有限公司 (2015/7-2015/12)
 
 *  部署IaaS平台
 *  配置Opendaglight SDN控制器
@@ -118,7 +118,7 @@ Email:jqjiang.1@gmail.com
 *  研究Openstack Nova, Neutron, Cinder, Swift deploy
 
 
-*  ### 上海天酉网络通信有限公司(2014/7-2014/8)
+*  ### 上海天酉网络通信有限公司 (2014/7-2014/8)
 *  为客户解决网络问题
 *  设计并实现无线局域网络
 *  为客户机房的交换机划分vlan
