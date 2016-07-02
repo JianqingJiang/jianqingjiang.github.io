@@ -162,6 +162,7 @@ Applying plugin configuration to rabbit@controller2... started 6 plugins.
 
 ```默认web ui url：http://server-name:15672默认user/pass: guest/guest
 ```
+rabbitmq界面  
 ![界面](/images/openstack_ha/2.png)###   注意事项  * 为了防止数据丢失的发生，在任何情况下都应该保证至少有一个 node 是采用磁盘node 方式。RabbitMQ 在很多情况下会阻止创建仅有内存 node 的 cluster ，但是如果你通过手动将 cluster 中的全部磁盘 node 都停止掉或者强制 reset 所有的磁盘node 的方式间接导致生成了仅有内存 node 的 cluster ，RabbitMQ 无法阻止你。你这么做本身是很不明智的，因为会导致你的数据非常容易丢失。  
 * 当整个 cluster 不能工作了，最后一个失效的 node 必须是第一个重新开始工作的那一个。如果这种情况得不到满足，所有 node 将会为最后一个磁盘 node 的恢复等待 30秒。如果最后一个离线的 node 无法重新上线，我们可以通过命令 forget_cluster_node将其从 cluster 中移除 - 具体参考 rabbitmqctl 的使用手册。  
 
