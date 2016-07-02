@@ -30,6 +30,9 @@ vi /etc/profile
 export LC_CTYPE=en_US.UTF-8
 ```
 
+
+使用redhat的快速安装工具，CONFIG_COMPUTE_HOSTS只需要在一个controller上填写即可，不需要所有controller上都写上
+
 ```
 packstack --gen-answer-file a.txt
 ```
