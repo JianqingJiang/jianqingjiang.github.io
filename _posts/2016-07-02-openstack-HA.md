@@ -931,6 +931,11 @@ listen mongodb-cluster
 service keepalived restart
 ```
 
+---
+
+###  keystone
+
+
 在/etc/keystone/keystone.conf中，将controller2，controller3上的密码改成与controller1一致的，端口号为haproxy的端口号    
 
 ```
@@ -997,6 +1002,8 @@ export OS_REGION_NAME=RegionOne
 ```
 netstat -plunt | grep 5000
 ```
+
+
 
 在vim /etc/haproxy/haproxy.cfg末尾加入下面配置
 
@@ -1075,6 +1082,10 @@ tcp        0      0 192.168.53.58:35357     0.0.0.0:*               LISTEN      
 [root@controller1 ~(keystone_admin)]# netstat -plunt | grep 5000
 tcp        0      0 192.168.53.58:5000      0.0.0.0:*               LISTEN      16951/httpd
 ```
+
+---
+
+###  glance
 
 在vim /etc/haproxy/haproxy.cfg末尾加入下面配置
 
@@ -1161,6 +1172,9 @@ service keepalived restart
 +----+------+
 ```
 
+---
+
+###  nova
 
 在vim /etc/haproxy/haproxy.cfg末尾加入下面配置
 
@@ -1360,6 +1374,9 @@ tcp        0      0 192.168.53.58:6080      0.0.0.0:*               LISTEN      
 
 ```
 
+---
+
+###  neutron
 
 在vim /etc/haproxy/haproxy.cfg末尾加入下面配置
 
@@ -1500,6 +1517,9 @@ openstack-service restart neutron
 +--------------------------------------+--------------------+-------------+-------+----------------+---------------------------+
 ```
 
+---
+
+###  cinder
 
 配置cinder
 编辑文件  /etc/cinder/cinder.conf  
@@ -1605,6 +1625,10 @@ openstack-service restart cinder
 +----+--------+------------------+------+------+-------------+----------+-------------+-------------+
 +----+--------+------------------+------+------+-------------+----------+-------------+-------------+
 ```
+
+---
+
+### ceilometer
 
 更改ceilometer配置
 
@@ -1744,6 +1768,12 @@ port = 8777
 #host = 0.0.0.0
 host = controller2 
 ```
+
+
+---
+
+###  dashboard
+
 在vim /etc/haproxy/haproxy.cfg末尾加入下面配置
 
 
