@@ -839,9 +839,9 @@ ___
 
 把keystone的数据库的IP地址全部换掉，换成haproxy的虚拟IP，可以使用navicat图形化界面  
   
-![install](/images/openstack_ha/4.jpg)
-
 ![install](/images/openstack_ha/5.jpg)
+
+![install](/images/openstack_ha/6.jpg)
 
 编辑文件  
 
@@ -1027,3 +1027,282 @@ export OS_REGION_NAME=RegionOne
 
 ```
 
+```
+[root@controller2 ~(keystone_admin)]# openstack service list
++----------------------------------+------------+-----------+
+| ID                               | Name       | Type      |
++----------------------------------+------------+-----------+
+| 13d5b7831a934442b8c16b2ac015c21c | nova_ec2   | ec2       |
+| 2fafe24035ad4d06bced3cbc4f387c95 | keystone   | identity  |
+| 3a2a2080cc4546ef9bc9ac9841323752 | neutron    | network   |
+| 958afac483274321a953f1ad217d2576 | ceilometer | metering  |
+| 9ad0bd50a95c4fe1a9045aaa38353f66 | nova       | compute   |
+| a3c70cc6b1a6410db36cbaba87afc05a | cinder     | volume    |
+| b663d22cae2048598d23238184ea3794 | cinderv2   | volumev2  |
+| c5bc60c03a384e889978b0b1b937347b | glance     | image     |
+| d5c7e6b3545b414baffe9ce86e954bca | novav3     | computev3 |
++----------------------------------+------------+-----------+
+
+```
+
+
+###注意点
+当controller和haproxy在同一台机器上时，才有端口冲突问题，在上面改端口号的方法之外，还可以编辑下面文件，就可以解决端口冲突问题  
+
+```
+/etc/httpd/conf/ports.conf
+
+
+Listen controller2:35357
+Listen controller2:5000
+Listen controller2:80
+```
+
+
+```
+[root@controller1 ~(keystone_admin)]# netstat -plunt | grep 35357
+tcp        0      0 192.168.53.58:35357     0.0.0.0:*               LISTEN      16951/httpd
+[root@controller1 ~(keystone_admin)]# netstat -plunt | grep 5000
+tcp        0      0 192.168.53.58:5000      0.0.0.0:*               LISTEN      16951/httpd
+```
+
+在vim /etc/haproxy/haproxy.cfg末尾加入下面配置
+
+```
+listen glance-registry
+    bind controller:9191
+    balance source
+    option tcpka
+    option tcplog
+    server controller1 controller1:9191 check inter 10s
+    server controller2 controller2:9191 check inter 10s
+    server controller3 controller3:9191 check inter 10s
+￼
+listen glance-api
+    bind controller:9292
+    balance source
+    option tcpka
+    option httpchk
+    option tcplog
+    server controller1 controller1:9292 check inter 10s rise 2 fall 5
+    server controller2 controller2:9292 check inter 10s rise 2 fall 5
+    server controller3 controller3:9292 check inter 10s rise 2 fall 5
+```
+
+在每个controller的
+/etc/glance/glance-api.conf进行更改  
+
+```
+#connection=mysql+pymysql://glance:96efbf0c50b84888@192.168.53.67/glance
+connection=mysql+pymysql://glance:3d53cbf61a6b4c6c@controller:3305/glance
+auth_uri=http://controller:5000/v2.0
+identity_uri=http://controller:35357
+admin_password=e5557a5325064c05   #这些需要跟controller1一致 
+bind_host=controller1
+registry_host=controller1
+rabbit_host=controller1,controller2,controller3
+rabbit_hosts=controller1:5672,controller2:5672,controller3:5672
+```
+
+/etc/glance/glance-registry.conf进行更改 
+
+```
+connection=mysql+pymysql://glance:3d53cbf61a6b4c6c@controller:3305/glance
+bind_host=controller1
+auth_uri=http://controller:5000/v2.0
+identity_uri=http://controller:35357
+admin_password=e5557a5325064c05
+
+```
+
+重启glance服务
+
+```
+openstack-service restart glance
+```
+
+
+```
+[root@controller1 ~(keystone_admin)]# netstat -plunt | grep 9191
+tcp        0      0 192.168.53.58:9191      0.0.0.0:*               LISTEN      29665/python2
+[root@controller1 ~(keystone_admin)]# netstat -plunt | grep 9292
+tcp        0      0 192.168.53.58:9292      0.0.0.0:*               LISTEN      29669/python2
+```
+
+重启keepalived服务
+
+```
+service keepalived restart
+```
+
+先启动程序在后台，可用于检查配置是否有问题  
+
+```
+[root@controller1 ~(keystone_admin)]# haproxy -f /etc/haproxy/haproxy.cfg
+```
+
+检查glance服务是否OK  
+
+```
+[root@controller2 ~(keystone_admin)]# glance image-list
++----+------+
+| ID | Name |
++----+------+
++----+------+
+```
+
+
+在vim /etc/haproxy/haproxy.cfg末尾加入下面配置
+
+```
+listen nova-compute-api
+    bind controller:8774
+    balance source
+    option tcpka
+    option httpchk
+    option tcplog
+    server controller1 controller1:8774 check inter 10s
+    server controller2 controller2:8774 check inter 10s
+    server controller3 controller3:8774 check inter 10s
+
+listen nova-metadata
+    bind controller:8775
+    balance source
+    option tcpka
+    option tcplog
+    server controller1 controller1:8775 check inter 10s
+    server controller2 controller2:8775 check inter 10s
+    server controller3 controller3:8775 check inter 10s
+```
+
+vim /etc/nova/nova.conf
+改为下面配置，做适当修改，可用wscp拷贝，再进行相应修改  
+
+```
+[root@controller1 ~(keystone_admin)]# egrep -v "^$|^#" /etc/nova/nova.conf
+[DEFAULT]
+novncproxy_host=controller1
+novncproxy_port=6080
+use_ipv6=False
+notify_api_faults=False
+state_path=/var/lib/nova
+report_interval=10
+enabled_apis=ec2,osapi_compute,metadata
+ec2_listen=controller1
+ec2_listen_port=8773
+ec2_workers=24
+osapi_compute_listen=controller1
+osapi_compute_listen_port=8774
+osapi_compute_workers=24
+metadata_listen=controller1
+metadata_listen_port=8775
+metadata_workers=24
+service_down_time=60
+rootwrap_config=/etc/nova/rootwrap.conf
+volume_api_class=nova.volume.cinder.API
+api_paste_config=api-paste.ini
+auth_strategy=keystone
+use_forwarded_for=False
+fping_path=/usr/sbin/fping
+cpu_allocation_ratio=16.0
+ram_allocation_ratio=1.5
+network_api_class=nova.network.neutronv2.api.API
+default_floating_pool=public
+force_snat_range =0.0.0.0/0
+metadata_host=controller1
+dhcp_domain=novalocal
+security_group_api=neutron
+scheduler_default_filters=RetryFilter,AvailabilityZoneFilter,RamFilter,ComputeFilter,ComputeCapabilitiesFilter,ImagePropertiesFilter,CoreFilter
+scheduler_driver=nova.scheduler.filter_scheduler.FilterScheduler
+vif_plugging_is_fatal=True
+vif_plugging_timeout=300
+firewall_driver=nova.virt.firewall.NoopFirewallDriver
+debug=False
+verbose=True
+log_dir=/var/log/nova
+use_syslog=False
+syslog_log_facility=LOG_USER
+use_stderr=True
+notification_driver =nova.openstack.common.notifier.rabbit_notifier,ceilometer.compute.nova_notifier
+notification_topics=notifications
+rpc_backend=rabbit
+sql_connection=mysql+pymysql://nova:55d6235461c34c4e@controller:3305/nova
+image_service=nova.image.glance.GlanceImageService
+lock_path=/var/lib/nova/tmp
+osapi_volume_listen=0.0.0.0
+novncproxy_base_url=http://192.168.53.23:6080/vnc_auto.html
+[api_database]
+[barbican]
+[cells]
+[cinder]
+catalog_info=volumev2:cinderv2:publicURL
+[conductor]
+use_local=False
+[cors]
+[cors.subdomain]
+[database]
+[ephemeral_storage_encryption]
+[glance]
+api_servers=controller:9292
+[guestfs]
+[hyperv]
+[image_file_url]
+[ironic]
+[keymgr]
+[keystone_authtoken]
+auth_uri=http://controller:5000/v2.0
+identity_uri=http://controller:35357
+admin_user=nova
+admin_password=0f2d84e61de642a2
+admin_tenant_name=services
+[libvirt]
+vif_driver=nova.virt.libvirt.vif.LibvirtGenericVIFDriver
+[matchmaker_redis]
+[matchmaker_ring]
+[metrics]
+[neutron]
+service_metadata_proxy=True
+metadata_proxy_shared_secret =9b8066d60bf948f7
+url=http://controller:9696
+admin_username=neutron
+admin_password=e8b3a57702d3447b
+admin_tenant_name=services
+region_name=RegionOne
+admin_auth_url=http://controller:5000/v2.0
+auth_strategy=keystone
+ovs_bridge=br-int
+extension_sync_interval=600
+timeout=30
+default_tenant_id=default
+[osapi_v21]
+[oslo_concurrency]
+[oslo_messaging_amqp]
+[oslo_messaging_qpid]
+[oslo_messaging_rabbit]
+amqp_durable_queues=False
+kombu_reconnect_delay=1.0
+rabbit_host=controller1,controller2,controller3
+rabbit_port=5672
+rabbit_hosts=controller1:5672,controller2:5672,controller3:5672
+rabbit_use_ssl=False
+rabbit_userid=guest
+rabbit_password=guest
+rabbit_virtual_host=/
+rabbit_ha_queues=False
+heartbeat_timeout_threshold=0
+heartbeat_rate=2
+[oslo_middleware]
+[rdp]
+[serial_console]
+[spice]
+[ssl]
+[trusted_computing]
+[upgrade_levels]
+[vmware]
+[vnc]
+[workarounds]
+[xenserver]
+[zookeeper]
+[osapi_v3]
+enabled=False
+```
