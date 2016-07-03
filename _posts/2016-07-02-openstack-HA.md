@@ -41,7 +41,7 @@ packstack --gen-answer-file a.txt
 vim a.txt
 CONFIG_DEFAULT_PASSWORD=bnc
 CONFIG_MANILA_INSTALL=n
-CONFIG_CEILOMETER_INSTALL=n
+CONFIG_CEILOMETER_INSTALL=y
 CONFIG_NAGIOS_INSTALL=n
 CONFIG_SWIFT_INSTALL=n
 CONFIG_PROVISION_DEMO=n
@@ -1209,7 +1209,7 @@ ram_allocation_ratio=1.5
 network_api_class=nova.network.neutronv2.api.API
 default_floating_pool=public
 force_snat_range =0.0.0.0/0
-metadata_host=controller1
+metadata_host=192.168.53.67
 dhcp_domain=novalocal
 security_group_api=neutron
 scheduler_default_filters=RetryFilter,AvailabilityZoneFilter,RamFilter,ComputeFilter,ComputeCapabilitiesFilter,ImagePropertiesFilter,CoreFilter
@@ -1305,4 +1305,451 @@ heartbeat_rate=2
 [zookeeper]
 [osapi_v3]
 enabled=False
+```
+  
+
+```
+#停止nova服务
+openstack-service stop nova
+#启动nova服务
+openstack-service start nova
+#查看状态
+openstack-service status nova
+```
+
+```
+[root@controller1 ~(keystone_admin)]# netstat -plunt | grep 8774
+tcp        0      0 192.168.53.58:8774      0.0.0.0:*               LISTEN      16661/python2
+[root@controller1 ~(keystone_admin)]# netstat -plunt | grep 8775
+tcp        0      0 192.168.53.58:8775      0.0.0.0:*               LISTEN      16661/python2
+[root@controller1 ~(keystone_admin)]# netstat -plunt | grep 6080
+tcp        0      0 192.168.53.58:6080      0.0.0.0:*               LISTEN      13794/python2
+```
+
+在再每个节点上重启keepalived
+
+```
+[root@controller2 ~(keystone_admin)]# nova service-list
++----+------------------+-------------+----------+---------+-------+----------------------------+-----------------+
+| Id | Binary           | Host        | Zone     | Status  | State | Updated_at                 | Disabled Reason |
++----+------------------+-------------+----------+---------+-------+----------------------------+-----------------+
+| 1  | nova-consoleauth | controller1 | internal | enabled | up    | 2016-07-03T06:54:05.000000 | -               |
+| 2  | nova-scheduler   | controller1 | internal | enabled | up    | 2016-07-03T06:54:05.000000 | -               |
+| 3  | nova-conductor   | controller1 | internal | enabled | up    | 2016-07-03T06:54:05.000000 | -               |
+| 4  | nova-cert        | controller1 | internal | enabled | up    | 2016-07-03T06:54:05.000000 | -               |
+| 5  | nova-compute     | compute1    | nova     | enabled | up    | 2016-07-03T06:54:13.000000 | -               |
+| 6  | nova-conductor   | controller2 | internal | enabled | up    | 2016-07-03T06:54:15.000000 | -               |
+| 9  | nova-consoleauth | controller2 | internal | enabled | up    | 2016-07-03T06:54:15.000000 | -               |
+| 18 | nova-cert        | controller2 | internal | enabled | up    | 2016-07-03T06:54:15.000000 | -               |
+| 21 | nova-scheduler   | controller2 | internal | enabled | up    | 2016-07-03T06:54:15.000000 | -               |
+| 24 | nova-consoleauth | controller3 | internal | enabled | up    | 2016-07-03T06:54:17.000000 | -               |
+| 27 | nova-cert        | controller3 | internal | enabled | up    | 2016-07-03T06:54:17.000000 | -               |
+| 30 | nova-conductor   | controller3 | internal | enabled | up    | 2016-07-03T06:54:17.000000 | -               |
+| 42 | nova-scheduler   | controller3 | internal | enabled | up    | 2016-07-03T06:54:17.000000 | -               |
++----+------------------+-------------+----------+---------+-------+----------------------------+-----------------+
+
+```
+
+
+在vim /etc/haproxy/haproxy.cfg末尾加入下面配置
+
+
+```
+listen vnc
+    bind controller:6080
+    balance source
+    server controller1 controller1:6080 check inter 10s
+    server controller2 controller2:6080 check inter 10s
+    server controller3 controller3:6080 check inter 10s
+```
+```
+listen neutron-server
+    bind controller:9696
+    balance source
+    option tcpka
+    option httpchk
+    option tcplog
+    server controller1 controller1:9696 check inter 10s
+    server controller2 controller2:9696 check inter 10s
+    server controller3 controller3:9696 check inter 10s
+```
+
+在/etc/neutron/neutron.conf中修改
+
+```
+[DEFAULT]
+verbose = True
+router_distributed = False
+debug = False
+state_path = /var/lib/neutron
+use_syslog = False
+use_stderr = True
+log_dir =/var/log/neutron
+bind_host = controller1
+bind_port = 9696
+core_plugin =neutron.plugins.ml2.plugin.Ml2Plugin
+service_plugins =router
+auth_strategy = keystone
+base_mac = fa:16:3e:00:00:00
+mac_generation_retries = 16
+dhcp_lease_duration = 86400
+dhcp_agent_notification = True
+allow_bulk = True
+allow_pagination = False
+allow_sorting = False
+allow_overlapping_ips = True
+advertise_mtu = False
+agent_down_time = 75
+router_scheduler_driver = neutron.scheduler.l3_agent_scheduler.ChanceScheduler
+allow_automatic_l3agent_failover = False
+dhcp_agents_per_network = 1
+l3_ha = False
+api_workers = 24
+rpc_workers = 24
+use_ssl = False
+notify_nova_on_port_status_changes = True
+notify_nova_on_port_data_changes = True
+nova_url = http://controller:8774/v2
+nova_region_name =RegionOne
+nova_admin_username =nova
+nova_admin_tenant_name =services
+nova_admin_password =0f2d84e61de642a2
+nova_admin_auth_url =http://controller:5000/v2.0
+send_events_interval = 2
+rpc_response_timeout=60
+rpc_backend=rabbit
+control_exchange=neutron
+lock_path=/var/lib/neutron/lock
+[matchmaker_redis]
+[matchmaker_ring]
+[quotas]
+[agent]
+root_helper = sudo neutron-rootwrap /etc/neutron/rootwrap.conf
+report_interval = 30
+[keystone_authtoken]
+auth_uri = http://controller:5000/v2.0
+identity_uri = http://controller:35357
+admin_tenant_name = services
+admin_user = neutron
+admin_password = e8b3a57702d3447b
+[database]
+connection = mysql+pymysql://neutron:e2620946daed4a13@controller:3305/neutron
+max_retries = 10
+retry_interval = 10
+min_pool_size = 1
+max_pool_size = 10
+idle_timeout = 3600
+max_overflow = 20
+[nova]
+[oslo_concurrency]
+[oslo_policy]
+[oslo_messaging_amqp]
+[oslo_messaging_qpid]
+[oslo_messaging_rabbit]
+kombu_reconnect_delay = 1.0
+rabbit_host = controller1,controller2,controller3
+rabbit_port = 5672
+rabbit_hosts = controller1:5672,controller2:5672,controller3:5672
+rabbit_use_ssl = False
+rabbit_userid = guest
+rabbit_password = guest
+rabbit_virtual_host = /
+rabbit_ha_queues = False
+heartbeat_rate=2
+heartbeat_timeout_threshold=0
+[qos]
+notification_drivers = message_queue
+```
+
+重启neutron服务  
+
+```
+openstack-service restart neutron
+```
+
+查看 neutron agent-list
+
+```
+[root@controller2 ~(keystone_admin)]# neutron agent-list
++--------------------------------------+--------------------+-------------+-------+----------------+---------------------------+
+| id                                   | agent_type         | host        | alive | admin_state_up | binary                    |
++--------------------------------------+--------------------+-------------+-------+----------------+---------------------------+
+| 07222119-8557-4bfa-ac91-a487fcaa5af0 | DHCP agent         | controller2 | :-)   | True           | neutron-dhcp-agent        |
+| 14316fc6-be8d-428c-a5c3-5dc29a71c0f2 | Metadata agent     | controller3 | :-)   | True           | neutron-metadata-agent    |
+| 19484a6f-97a8-4bd1-9c46-26981aa99058 | DHCP agent         | controller1 | :-)   | True           | neutron-dhcp-agent        |
+| 31afaa71-9b88-4d70-b055-3ad5e2f571e3 | Open vSwitch agent | controller3 | :-)   | True           | neutron-openvswitch-agent |
+| 352c4254-03f8-41a3-97d9-49ccd58a35ba | Open vSwitch agent | compute1    | :-)   | True           | neutron-openvswitch-agent |
+| 3684ae49-0090-426e-aaa9-6ea7532d1f02 | Open vSwitch agent | controller1 | :-)   | True           | neutron-openvswitch-agent |
+| 6169e996-5640-4313-8814-0845e1f9726a | Metadata agent     | controller2 | :-)   | True           | neutron-metadata-agent    |
+| 77d56e37-549e-4ec8-8805-c99f8820a955 | L3 agent           | controller2 | :-)   | True           | neutron-l3-agent          |
+| 998292f4-9a88-404c-8688-04eedb612ea4 | Open vSwitch agent | controller2 | :-)   | True           | neutron-openvswitch-agent |
+| a0ceb7d5-ee2d-49c1-920f-ae717913c2f6 | L3 agent           | controller1 | :-)   | True           | neutron-l3-agent          |
+| a4f09402-9d1d-4660-842c-01bf3da06e25 | Metadata agent     | controller1 | :-)   | True           | neutron-metadata-agent    |
+| c67bb302-6911-49a6-8e84-b251eb5ac2e4 | DHCP agent         | controller3 | :-)   | True           | neutron-dhcp-agent        |
+| fa79912d-0bf6-4373-b6a8-c1b8746f3931 | L3 agent           | controller3 | :-)   | True           | neutron-l3-agent          |
++--------------------------------------+--------------------+-------------+-------+----------------+---------------------------+
+```
+
+
+配置cinder
+编辑文件  /etc/cinder/cinder.conf  
+
+```
+[root@controller1 ~(keystone_admin)]# egrep -v "^$|^#" /etc/cinder/cinder.conf
+[DEFAULT]
+glance_host = controller
+enable_v1_api = True
+enable_v2_api = True
+host = controller1
+storage_availability_zone = nova
+default_availability_zone = nova
+auth_strategy = keystone
+enabled_backends = lvm
+osapi_volume_listen = controller1
+osapi_volume_workers = 24
+nova_catalog_info = compute:nova:publicURL
+nova_catalog_admin_info = compute:nova:adminURL
+debug = False
+verbose = True
+log_dir = /var/log/cinder
+notification_driver =messagingv2
+rpc_backend = rabbit
+control_exchange = openstack
+api_paste_config=/etc/cinder/api-paste.ini
+[BRCD_FABRIC_EXAMPLE]
+[CISCO_FABRIC_EXAMPLE]
+[cors]
+[cors.subdomain]
+[database]
+connection = mysql+pymysql://cinder:73e7560f8da542b3@controller:3305/cinder
+[fc-zone-manager]
+[keymgr]
+[keystone_authtoken]
+auth_uri = http://controller:5000
+identity_uri = http://controller:35357
+admin_user = cinder
+admin_password = a1db95ea939449b5
+admin_tenant_name = services
+[matchmaker_redis]
+[matchmaker_ring]
+[oslo_concurrency]
+[oslo_messaging_amqp]
+[oslo_messaging_qpid]
+[oslo_messaging_rabbit]
+amqp_durable_queues = False
+kombu_ssl_keyfile =
+kombu_ssl_certfile =
+kombu_ssl_ca_certs =
+rabbit_host = controller1,controller2,controller3
+rabbit_port = 5672
+rabbit_hosts = controller1:5672,controller2:5672,controller3:5672
+rabbit_use_ssl = False
+rabbit_userid = guest
+rabbit_password = guest
+rabbit_virtual_host = /
+rabbit_ha_queues = False
+heartbeat_timeout_threshold = 0
+heartbeat_rate = 2
+[oslo_middleware]
+[oslo_policy]
+[oslo_reports]
+[profiler]
+[lvm]
+iscsi_helper=lioadm
+volume_group=cinder-volumes
+iscsi_ip_address=192.168.53.58
+volume_driver=cinder.volume.drivers.lvm.LVMVolumeDriver
+volumes_dir=/var/lib/cinder/volumes
+iscsi_protocol=iscsi
+volume_backend_name=lvm
+```
+
+在vim /etc/haproxy/haproxy.cfg末尾加入下面配置
+
+```
+listen cinder-api
+    bind controller:8776
+    balance source
+    option tcpka
+    option httpchk
+    option tcplog
+    server controller1 controller1:8776 check inter 10s rise 2 fall 5
+    server controller2 controller2:8776 check inter 10s rise 2 fall 5
+    server controller3 controller3:8776 check inter 10s rise 2 fall 5
+```
+重启服务  
+
+
+```
+openstack-service restart cinder
+
+```
+
+
+验证服务 
+
+```
+[root@controller2 ~(keystone_admin)]# cinder list
++----+--------+------------------+------+------+-------------+----------+-------------+-------------+
+| ID | Status | Migration Status | Name | Size | Volume Type | Bootable | Multiattach | Attached to |
++----+--------+------------------+------+------+-------------+----------+-------------+-------------+
++----+--------+------------------+------+------+-------------+----------+-------------+-------------+
+```
+
+更改ceilometer配置
+
+vi /etc/ceilometer/ceilometer.conf
+
+```
+[DEFAULT]
+http_timeout = 600
+debug = False
+verbose = True
+log_dir = /var/log/ceilometer
+use_syslog = False
+syslog_log_facility = LOG_USER
+use_stderr = True
+notification_topics = notifications
+rpc_backend = rabbit
+meter_dispatcher=database
+event_dispatcher=database
+[alarm]
+evaluation_interval = 60
+record_history = True
+evaluation_service=ceilometer.alarm.service.SingletonAlarmService
+partition_rpc_topic=alarm_partition_coordination
+[api]
+port = 8777
+host = controller2
+[central]
+[collector]
+udp_address = 0.0.0.0
+udp_port = 4952
+[compute]
+[coordination]
+[database]
+metering_time_to_live = -1
+event_time_to_live = -1
+alarm_history_time_to_live = -1
+connection = mongodb://controller:27017/ceilometer
+idle_timeout = 3600
+min_pool_size = 1
+max_pool_size = 10
+max_retries = 10
+retry_interval = 10
+max_overflow = 20
+[dispatcher_file]
+[dispatcher_gnocchi]
+[event]
+[exchange_control]
+[hardware]
+[ipmi]
+[keystone_authtoken]
+auth_uri = http://controller:5000/v2.0
+identity_uri = http://controller:35357
+admin_user = ceilometer
+admin_password = bnc
+admin_tenant_name = services
+[matchmaker_redis]
+[matchmaker_ring]
+[meter]
+[notification]
+ack_on_event_error = True
+store_events = False
+[oslo_concurrency]
+[oslo_messaging_amqp]
+[oslo_messaging_qpid]
+[oslo_messaging_rabbit]
+rabbit_host = controller1,controller2,controller3
+rabbit_port = 5672
+rabbit_hosts = controller1:5672,controller2:5672,controller3:5672
+rabbit_use_ssl = False
+rabbit_userid = guest
+rabbit_password = guest
+rabbit_virtual_host = /
+rabbit_ha_queues = False
+heartbeat_timeout_threshold = 0
+heartbeat_rate = 2
+[oslo_policy]
+[polling]
+[publisher]
+metering_secret=0301fa12b3f349c9
+[publisher_notifier]
+[publisher_rpc]
+[rgw_admin_credentials]
+[service_credentials]
+os_username = ceilometer
+os_password = bnc
+os_tenant_name = services
+os_auth_url = http://controller:5000/v2.0
+os_region_name = RegionOne
+[service_types]
+[vmware]
+[xenapi]
+```
+
+重启ceilometer服务
+
+```
+openstack-service restart ceilometer
+
+```
+
+```
+[root@controller2 ~(keystone_admin)]# ceilometer meter-list
++------+------+------+-------------+---------+------------+
+| Name | Type | Unit | Resource ID | User ID | Project ID |
++------+------+------+-------------+---------+------------+
++------+------+------+-------------+---------+------------+
+```
+
+在vim /etc/haproxy/haproxy.cfg末尾加入下面配置
+
+```
+listen ceilometer_api
+   bind controller:8777
+   balance source
+   server controller1 controller1:8777 check inter 2000 rise 2 fall 5
+   server controller2 controller2:8777 check inter 2000 rise 2 fall 5
+   server controller3 controller3:8777 check inter 2000 rise 2 fall 5
+```
+
+* 注意点：每次添加完/etc/haproxy/haproxy.cfg配置后都需要在各个controller上重启keepalived或者在active的haproxy节点上重启haproxy服务  
+
+```
+[api]
+
+#
+# From ceilometer
+#
+
+# The port for the ceilometer API server. (integer value)
+# Minimum value: 1
+# Maximum value: 65535
+# Deprecated group/name - [DEFAULT]/metering_api_port
+#port = 8777
+port = 8777
+
+# The listen IP for the ceilometer API server. (string value)
+#host = 0.0.0.0
+host = controller2 
+```
+在vim /etc/haproxy/haproxy.cfg末尾加入下面配置
+
+
+```
+listen dashboard
+   bind controller:80
+   balance source
+   option httpchk
+   option tcplog
+   server controller1 controller1:80 check inter 10s
+   server controller2 controller2:80 check inter 10s
+   server controller3 controller3:80 check inter 10s
+```
+
+HAproxy提供的界面
+
+```
+http://192.168.53.58:8080/haproxy_stats
 ```
