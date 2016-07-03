@@ -740,6 +740,8 @@ Permissive
 ```
 更改配置
 为了防止虚拟IP乱飘，controller之间的priority可以设置为200，150，100
+
+
 ```
 [root@controller1 ~]# vim /etc/keepalived/keepalived.conf
 
@@ -840,9 +842,9 @@ ___
 
 把keystone的数据库的IP地址全部换掉，换成haproxy的虚拟IP，可以使用navicat图形化界面  
   
-![install](/images/openstack_ha/5.png)
-
 ![install](/images/openstack_ha/6.png)
+
+![install](/images/openstack_ha/5.png)
 
 编辑文件  
 
@@ -1754,6 +1756,9 @@ HAproxy提供的界面
 ```
 http://192.168.53.58:8080/haproxy_stats
 ```
+
+![install](/images/openstack_ha/7.png)
+
 httpd 配置
 
 ```
@@ -1761,8 +1766,12 @@ mv /etc/httpd/conf.d/15-default.conf  /etc/httpd/conf.d/15-default.conf.back
 service httpd restart 
 ```
 
+
+
 vip的dashboard
 
 ```
 http://192.168.53.24/dashboard
 ```
+
+![install](/images/openstack_ha/8.png)
