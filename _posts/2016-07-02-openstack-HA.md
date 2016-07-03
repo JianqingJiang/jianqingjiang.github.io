@@ -6,11 +6,11 @@ tags: [OpenStack]
 categories: [OpenStack]
 ---
 
-环境：CentOS 7  OpenStack Liberty   拓扑： 
+### 环境：CentOS 7  OpenStack Liberty   ###  拓扑： 
 ![install](/images/openstack_ha/9.png)* 每个服务器两张网卡* 每个服务器的硬盘除了sda之外都做ceph存储  
 
 
-推荐配置  
+###   推荐配置  
  
 * ceph 集群大概需要12块硬盘（小企业），最好是SSD* 每个服务器需要8张网卡，两两做bund，提供管理网络，业务网络，外部网络，存储网络 * 计算节点需要超过128g内存# Controller
 ### 基础配置  
