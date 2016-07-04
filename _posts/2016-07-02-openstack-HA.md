@@ -1801,6 +1801,9 @@ httpd 配置
 
 ```
 mv /etc/httpd/conf.d/15-default.conf  /etc/httpd/conf.d/15-default.conf.back
+
+vim /etc/openstack-dashboard/local_settingsSECRET_KEY = '95b37c567cc4431e9ae875f3eb228c48'
+
 service httpd restart 
 ```
 
