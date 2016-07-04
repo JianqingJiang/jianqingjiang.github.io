@@ -1797,12 +1797,12 @@ http://192.168.53.58:8080/haproxy_stats
 
 ![install](/images/openstack_ha/7.png)
 
-httpd 配置
+httpd 配置(每个节点都需要)
 
 ```
 mv /etc/httpd/conf.d/15-default.conf  /etc/httpd/conf.d/15-default.conf.back
 
-vim /etc/openstack-dashboard/local_settingsSECRET_KEY = '95b37c567cc4431e9ae875f3eb228c48'
+vim /etc/openstack-dashboard/local_settingsSECRET_KEY = '95b37c567cc4431e9ae875f3eb228c48' # 保持三个controller的SECRET_KEY一致
 
 service httpd restart 
 ```
