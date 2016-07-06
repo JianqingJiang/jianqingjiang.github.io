@@ -271,8 +271,8 @@ root@devstack:/home/python-openstackclient/doc/source# git commit -a
 
 
 git log可以看到自己的commit，还有唯一的ID  
-```
 
+```
 root@devstack:/home/python-openstackclient/doc/source# git log
 commit 1b05a6dff9faaabac030794423d781b647818f0a
 Author: jqjiang.1@gmail.com <jqjiang.1@gmail.com>
