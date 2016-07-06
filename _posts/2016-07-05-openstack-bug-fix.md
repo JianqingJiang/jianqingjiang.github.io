@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 	如何向openstack社区提交代码
+title: 	如何向OpenStack社区提交代码
 description: "openstack"
 tags: [OpenStack]
 categories: [OpenStack]
