@@ -10,7 +10,7 @@ categories: [OpenStack]
 
 有幸参加OpenStack bug smash活动，对“我的第一个patch”做了一下总结，写了如下教程  
 
-![image](/images/openstack-bug-fix/4.jpg)
+![image](/images/openstack-bug-fix/4.png)
 
 
 
