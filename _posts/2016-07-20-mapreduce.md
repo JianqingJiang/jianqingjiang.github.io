@@ -5,7 +5,9 @@ description: "大数据时代的MapReduce"
 tags: [Bigdata]
 categories: [Bigdata]
 ---
-  
+ 
+ 
+![1](/images/mapreduce/3.ipg) 
   
 
 大名鼎鼎的[MapReduce:Simplified Data Processing on Large Clusters](http://research.google.com/archive/mapreduce.html "MapReduce:Simplified Data Processing on Large Clusters")文章就开门见山地说明了MapReduce是干嘛用的  > MapReduce is a programming model and associated implementation for processing and generating large data sets.
@@ -34,7 +36,7 @@ MapReduce特性:
 
 这些按照时间顺序包括：输入分片（input split）、map阶段、combiner阶段、shuffle阶段和reduce阶段。
 
- Map:
+Map:
 对数据进行切片，处理错误的数据
 
 Combiner Function: combiner是一个可选的功能，mapreduce允许combiner在数据进行传输之前去整合数据，combiner功能在每台运行map的机器上执行，在combiner处理完数据之后，数据再被reduce所处理。
