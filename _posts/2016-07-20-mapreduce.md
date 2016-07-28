@@ -7,7 +7,7 @@ categories: [Bigdata]
 ---
  
  
-![3](/images/mapreduce/3.ipg) 
+![3](/images/mapreduce/3.jpg) 
   
 
 大名鼎鼎的[MapReduce:Simplified Data Processing on Large Clusters](http://research.google.com/archive/mapreduce.html "MapReduce:Simplified Data Processing on Large Clusters")文章就开门见山地说明了MapReduce是干嘛用的  > MapReduce is a programming model and associated implementation for processing and generating large data sets.
