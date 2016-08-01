@@ -258,5 +258,7 @@ drop_flows_on_start=False
 firewall_driver = neutron.agent.linux.iptables_firewall.OVSHybridIptablesFirewallDriver
 ```
 
+磁盘总量如下，使用了3T*9=27T(ceph3备份)  
 
+![1](/images/openstack_ceph/1.png) 
 
