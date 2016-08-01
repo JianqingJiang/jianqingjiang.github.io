@@ -5,7 +5,8 @@ description: "OpenStack对接Ceph"
 tags: [OpenStack]
 categories: [OpenStack]
 ---
-
+###   环境：3台Controller的硬盘作为ceph存储，每台Controller上有3块硬盘，其余为Compute节点
+
 ## install clients
 
 每个节点安装（要访问ceph集群的节点）
