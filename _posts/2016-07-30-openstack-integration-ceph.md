@@ -43,9 +43,7 @@ ceph -w
 
 ```
 ceph auth get-or-create client.glance mon 'allow r' osd 'allow class-read object_prefix rbd_children, allow rwx pool=images'
-
 ceph auth get-or-create client.cinder mon 'allow r' osd 'allow class-read object_prefix rbd_children, allow rwx pool=volumes, allow rwx pool=vms, allow rx pool=images'
-
 nova使用cinder用户，就不单独创建了
 ```
 
@@ -102,9 +100,7 @@ EOF
 ```
 sudo virsh secret-define --file secret.xml
 生成key
-
 ceph auth get-key client.cinder > ./client.cinder.key
-
 sudo virsh secret-set-value --secret adc522c4-237c-4cb8-8e39-682adcf4a830 --base64 $(cat ./client.cinder.key)
 ```
 
@@ -180,7 +176,6 @@ ac5c334f-fbc2-4c56-bf48-47912693b692
 ```
 /etc/cinder/cinder.conf
 
-
 [DEFAULT]
 ...
 enabled_backends = ceph
@@ -205,9 +200,7 @@ rbd_secret_uuid = adc522c4-237c-4cb8-8e39-682adcf4a830
 
 ```
 openstack-service restart cinder
-
 创建一个云硬盘
-
 [root@controller1 ~]# rbd ls volumes
 volume-463c3495-1747-480f-974f-51ac6e1c5612
 ```
@@ -220,7 +213,6 @@ volume-463c3495-1747-480f-974f-51ac6e1c5612
 
 ```
 /etc/nova/nova.conf
-
 
 [libvirt]
 images_type = rbd
@@ -241,7 +233,6 @@ live_migration_flag="VIR_MIGRATE_UNDEFINE_SOURCE,VIR_MIGRATE_PEER2PEER,VIR_MIGRA
 ```
 [root@compute1 ~]# ovs-vsctl add-br br-data
 [root@compute1 ~]# ovs-vsctl add-port br-data enp7s0f0
-
 [root@compute1 ~]# egrep -v "^$|^#" /etc/neutron/plugins/ml2/openvswitch_agent.ini
 [ovs]
 integration_bridge = br-int

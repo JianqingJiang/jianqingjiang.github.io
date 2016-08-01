@@ -51,11 +51,9 @@ ovs-vsctl add-port br-data enp7s0f0
 yum install ceph-common
 把controller3上的根目录下的secret.xml拷贝到compute2上
 sudo virsh secret-define --file secret.xml
-
 生成key
 ceph auth get-key client.cinder > ./client.cinder.key
 sudo virsh secret-set-value --secret adc522c4-237c-4cb8-8e39-682adcf4a830 --base64 $(cat ./client.cinder.key)
-
 重启服务
 service openstack-nova-compute restart
 systemctl enable openstack-nova-compute
