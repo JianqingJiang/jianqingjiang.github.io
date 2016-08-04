@@ -4,6 +4,8 @@ title: OpenStack spice协议配置
 description: "OpenStack spice协议配置"
 tags: [OpenStack]
 categories: [OpenStack]
+image:
+  background: triangular.png
 ---
 ## Enable SPICE HTML5 Console Access in OpenStack Mikata
 环境: CentOS7 + OpenStack Mikata 
