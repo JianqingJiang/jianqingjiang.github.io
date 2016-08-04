@@ -8,17 +8,17 @@ categories: [OpenStack]
 ## Enable SPICE HTML5 Console Access in OpenStack Mikata
 环境: CentOS7 + OpenStack Mikata 
 ###  SPICE VS VNC  | BIOS屏幕显示        | 能           | 能|
-| ------------- |:-------------:| -----:|
+|:--------|:-------:|--------:|
 | 全彩支持      | 能 | 能 |
 | 更改分辨率      | 能     |   能 |
-| 多显示器 | 多显示器支持（高达4画面）      |    只有一个屏幕
-| 图像传输 | 图像和图形传输      |    图像传输 
-| 视频播放支持 | GPU加速支持      |    不能 
-| 音频传输 | 双向语音可以控制      |   不能
-| 鼠标控制 | 客户端服务器都可以控制  |    服务器端控制 
-| USB传输 | USB可以通过网络传输    |    不能
-| 加密 | 通讯可以使用SSL进行加密      |    不能 
-
+| 多显示器 | 多显示器支持（高达4画面）      |    只有一个屏幕|
+| 图像传输 | 图像和图形传输      |    图像传输 |
+| 视频播放支持 | GPU加速支持      |    不能|
+| 音频传输 | 双向语音可以控制      |   不能|
+| 鼠标控制 | 客户端服务器都可以控制  |    服务器端控制 |
+| USB传输 | USB可以通过网络传输    |    不能|
+| 加密 | 通讯可以使用SSL进行加密      |    不能 |
+{: rules="groups"}
 
 
 ###   Spice协议通信拓扑
@@ -70,6 +70,7 @@ In both config files, ensure  vnc_enabled=False is explicitly set. If novnc is e
 
 Control IP = 192.168.1.100  
 Compute IP = 172.16.1.100   [Internal IP - ports may need to be opened if not already there]  
+
 ####   On Control Node
 
 {% highlight css %}
@@ -94,6 +95,7 @@ agent_enabled=true
 keymap=en-us
 
 {% endhighlight %}
+
 
 #####   设置iptables
 
@@ -130,13 +132,16 @@ keymap=en-us
 {% endhighlight %}
 
 
+
 ###  Restart services
+
 
 ####   On Compute
 
 ```
 # service openstack-nova-compute restart
 ```
+
 ####   On Control
 
 ```
