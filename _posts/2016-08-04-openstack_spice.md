@@ -1,7 +1,7 @@
 ---
 layout: post
-title: OpenStack spice协议配置
-description: "OpenStack spice协议配置"
+title: OpenStack Spice协议配置
+description: "OpenStack Spice协议配置"
 tags: [OpenStack]
 categories: [OpenStack]
 image:
