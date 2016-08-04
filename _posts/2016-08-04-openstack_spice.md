@@ -75,7 +75,7 @@ Compute IP = 172.16.1.100   [Internal IP - ports may need to be opened if not al
 
 ####   On Control Node
 
-{% highlight css %}
+{% highlight python %}
 
 /etc/nova/nova.conf
 [DEFAULT]
@@ -110,7 +110,7 @@ You can make permanent by adding the above rule to /etc/sysconfig/iptables (befo
 
 ####   Config Changes on Compute Node
 
-{% highlight css %}
+{% highlight python %}
 
 /etc/nova/nova.conf
 [DEFAULT]
