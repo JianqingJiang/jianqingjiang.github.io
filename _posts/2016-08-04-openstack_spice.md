@@ -179,6 +179,7 @@ OpenStack中的windows7播放视频，有点卡，由于在服务器中图像处
 
 
 
-windows客户端登陆云桌面  
-
-http://virt-manager.org/download/sources/virt-viewer/virt-viewer-x64-2.0.msi 
+[windows客户端下载](http://virt-manager.org/download/sources/virt-viewer/virt-viewer-x64-2.0.msi "windows客户端下载")登陆云桌面   
+ 
+下面的链接是我制作好放在YouTube上的云桌面视频（需要翻墙）
+[云桌面视频](https://youtu.be/eUDUuoSXE-c "云桌面视频")
