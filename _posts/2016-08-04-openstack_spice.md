@@ -41,6 +41,11 @@ yum install spice-html5
 
 spice-html5 在epel源里，需要配置epel源
 
+
+```
+vi /etc/yum.repos.d/epel.repo  
+```
+
 ```
 [epel]
 name=Extra Packages for Enterprise Linux 7 - $basearch
@@ -50,8 +55,12 @@ failovermethod=priority
 enabled=1
 gpgcheck=0
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-7
+
 ```
 
+```
+yum makecache
+```
 On Control:
 
 ```
@@ -168,3 +177,9 @@ keymap=en-us
 OpenStack中的windows7播放视频，有点卡，由于在服务器中图像处理都是CPU来做的，需要优化spice协议
 
 ![4](/images/openstack_spice/1.jpg)
+
+
+
+windows客户端登陆云桌面  
+
+http://virt-manager.org/download/sources/virt-viewer/virt-viewer-x64-2.0.msi 
