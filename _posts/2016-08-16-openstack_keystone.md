@@ -444,6 +444,8 @@ UUID token 简单美观，不携带其它信息，因此 Keystone 必须实现 t
 
 在阐述 PKI（Public Key Infrastruction） token 前，让我们简单的回顾 公开密钥加密(public-key cryptography) 和 数字签名 。公开密钥加密，也称为非对称加密(asymmetric cryptography，加密密钥和解密密钥不相同)，在这种密码学方法中，需要一对密钥，分别为公钥(Public Key)和私钥(Private Key)，公钥是公开的，私钥是非公开的，需用户妥善保管。如果把加密和解密的流程当做函数 C(x) 和 D(x)，P 和 S 分别代表公钥和私钥，对明文 A 和密文 B 而言，数学的角度上有以下公式：
 
+
+
 ```
 B = C(A, S)A = D(B, P)
 ```
@@ -521,18 +523,21 @@ def _get_token_id(self, token_data):
                                      CONF.signing.certfile,
                                      CONF.signing.keyfile))
         return token_id
+```
+
+
+
 其中 cms.pkiz_sign() 中的以下代码调用 zlib 对签名后的消息进行压缩级别为 6 的压缩。
 
 compressed = zlib.compress(token_id, compression_level=6)
 PKIZ token 样例如下，共 1645 Byte，比 PKI token 减小 14.86 %：
 
 
-
-<pre><code>
+```
 PKIZ_eJytVcuOozgU3fMVs49aTXhUN0vAQEHFJiRg8IVHgn5OnA149JVaunNS3NYjoSU
 ......
 W4fRaxrbNtinojheVICXYrEk0oPX6TSnP71IYj2e3nm4MLy7S84PtIPDz4_03IsOb2Q=
-</code></pre>
+```
 
 
 
