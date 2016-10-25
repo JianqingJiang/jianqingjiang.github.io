@@ -6,9 +6,8 @@ tags: [OpenStack]
 categories: [OpenStack]
 ---
 
-## OpenStack巴塞罗那峰会Day1
 
-###  简述
+##  简述
 
 由于本文介绍重点主要是以一个技术人的角度去观察OpenStack的下一个重点和趋势在哪里，由于会场太多分身无术。文章就重点介绍一些热门度高的和社区投入精力大的项目。通过阅读本文也可以了解到OpenStack在全球的重要的应用场景和开发的重点。由于时间匆忙，一些句子仍然使用英文。    
 
@@ -20,8 +19,7 @@ categories: [OpenStack]
 
 ![cert](/images/openstack-barcelona-summit/2.jpg)  
 
-上午的会议是在"TED"风格的演讲厅中进行的。开头主要是介绍的OpenStack的新版本“Newton”,新版本还是围绕以下四个主题展开。
-
+上午的会议是在"TED"风格的演讲厅中进行的。开头主要是介绍的OpenStack的新版本"Newton",新版本还是围绕以下四个主题展开。
 open source  open community  open development  open design  
 
 ![cert](/images/openstack-barcelona-summit/3.jpg) 
@@ -29,7 +27,7 @@ open source  open community  open development  open design
 
 ![cert](/images/openstack-barcelona-summit/4.jpg)  
 
-###   正文
+##  正文
 介绍主要分为4个部分
 
 ###  1.Enterprise Big Data
@@ -89,7 +87,7 @@ medical imaging @ wolfson brain imaging centre
 the challenges of science  
 HPC:cloud for science  
 
-### 分会场  
+## 分会场  
 
 OpenStack社区正在力推他们自己官方的认证，所以这次峰会特地开了一个track是关于怎么提交bug和贡献代码的  
 
@@ -102,6 +100,7 @@ Docker也是大家都争先恐后对接的新技术，Google的kubernetes管理d
 
 ![cert](/images/openstack-barcelona-summit/7.jpg) 
 
+基本上从第一天就可以看出社区的走向和各个项目的趋势，是被废除的概率高还是被用户越来越多的使用等情况。第二天准备去Design Summit跟deverloper做一些交流。
 
 
 
