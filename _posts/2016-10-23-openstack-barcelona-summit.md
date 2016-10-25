@@ -19,7 +19,7 @@ categories: [OpenStack]
 
 ![cert](/images/openstack-barcelona-summit/2.jpg)  
 
-上午的会议是在"TED"风格的演讲厅中进行的。开头主要是介绍的OpenStack的新版本"Newton",新版本还是围绕以下四个主题展开。
+上午的会议是在"TED"风格的演讲厅中进行的。开头主要是介绍的OpenStack的新版本"Newton",新版本还是围绕以下四个主题展开。  
 open source  open community  open development  open design  
 
 ![cert](/images/openstack-barcelona-summit/3.jpg) 
