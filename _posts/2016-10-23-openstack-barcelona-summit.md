@@ -65,7 +65,7 @@ openstack也正在成为云的一个标准openstack as the opensourec cloud stan
 运营商面临一个更加严峻的挑战，即使高可用因为运营商的云can not fail
 
 
-###   4.scientfic research
+###   4.Scientfic Research
 分享研究所：欧洲原子能机构  
 largest machine in CERN  
 a lot of pyscics  
