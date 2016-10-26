@@ -89,13 +89,17 @@ Design Summit是今后峰会的亮点，也正式与之前的Hackthon和OpenStac
 ![4](/images/openstack-barcelona-summit-2/4.jpg)  
 
 
-##  Neutron：一些有趣的特性
+##  分会场：一些有趣的特性
 
 网络层面富士公司对于DVR网络的防火墙问题，另外对于Neutron的网络难于troubleshooting的问题做了“neutron logging”地项目  
 
 ![5](/images/openstack-barcelona-summit-2/5.jpg)  
 ![6](/images/openstack-barcelona-summit-2/6.jpg)  
 ![7](/images/openstack-barcelona-summit-2/7.jpg)  
+
+OpenStack社区也在积极得向Opendaylight社区以及OPNFV社区合作，也符合OpenStack的“big tent”的一贯作风  
+
+![9](/images/openstack-barcelona-summit-2/9.jpg)
 
 
 
