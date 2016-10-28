@@ -77,7 +77,7 @@ Distributed NAT+1
 ![image](/images/openstack-barcelona-summit-3/10.jpg)
 
 对于Neutron来说则是有很大提升的，dragonflow也是目前做对接OpenStack做的最好的
-我司也在做一个对接OpenStack的控制器，名称为DCFabric  
+我司也在做一个对接OpenStack的控制器，名称为[DCFabric](http://launchpad.net/dcfabric "DCFabric")  
 
 ##    4.Okata Road Map
 
@@ -89,4 +89,4 @@ Okata版本基本上的roadmap也出来了，社区做了一个session是讲各�
 
 ![image](/images/openstack-barcelona-summit-3/7.jpg)  
 
-由于我比较关注网络方面，因此大部分都是网络，希望下次可以波士顿见～
+由于我比较关注网络方面，因此大部分都是网络。其实4天听下来网络的问题是最多的，加入向Docker等虚拟化技术对Nova的影响远远没有网络影响大，而且在规模大了之后，网络的延迟的吞吐量也是很值得关注的，而且Neutron作为OpenStack必须部署的组件之一，关键程度不言而喻。因此网络的问题也是社区放了很多力量在上面。下次的OpenStack版本是Okata,希望可以波士顿见～
