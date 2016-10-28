@@ -76,8 +76,7 @@ Distributed NAT+1
 
 ![image](/images/openstack-barcelona-summit-3/10.jpg)
 
-对于Neutron来说则是有很大提升的，dragonflow也是目前做对接OpenStack做的最好的
-我司也在做一个对接OpenStack的控制器，名称为[DCFabric](http://launchpad.net/dcfabric "DCFabric")  
+对于Neutron来说则是有很大提升的，dragonflow也是目前做对接OpenStack做的最好的。我司也在做一个对接OpenStack的控制器，名称为[DCFabric](http://launchpad.net/dcfabric "DCFabric")  
 
 ##    4.Okata Road Map
 
