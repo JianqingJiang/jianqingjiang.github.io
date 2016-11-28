@@ -23,7 +23,6 @@ Openstack Mitaka版本，终止了云主机之后，发现无法删除对应的�
 
 ```
 # cinder list |grep error 
-
 ```
 
 ![image](/images/openstack_cinder_error_deleting/2.png)
@@ -31,16 +30,16 @@ Openstack Mitaka版本，终止了云主机之后，发现无法删除对应的�
 
 命令行删除，提示报错说还有依赖的快照。  
 
+
 ```
 # cinder delete XXX
-
 ```
 
 ```
 Delete for volume XXX failed: Invalid volume: Volume still has 1 dependent snapshots. (HTTP 400) (Request-ID: req-5ba025fb-5a61-422b-b00a-556e19083bd5)
 ERROR: Unable to delete any of the specified volumes.
-
 ```
+
 ![image](/images/openstack_cinder_error_deleting/3.png)
 
 
@@ -56,13 +55,16 @@ show databases;
 
 ![image](/images/openstack_cinder_error_deleting/5.png)
 
+
 ```
 use cinder;
 ```
 
+
 ```
 show tables;
 ```
+
 ![image](/images/openstack_cinder_error_deleting/6.png)
 
 select找到出错的数据  
@@ -78,7 +80,7 @@ select找到出错的数据
 
 发现已经成功得删除了出错的cinder盘
 
-总结：
+总结：  
 1、删除的时候注意id和volume-id两个字段，不要弄混掉了；
 2、测试环境，暴力解决问题还是不太好，注意检查日志来对症下药。  
 3、不要简单得去删除表中数据，而是需要更改状态
