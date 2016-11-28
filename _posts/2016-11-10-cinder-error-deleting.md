@@ -17,10 +17,7 @@ Openstack Mitaka版本，终止了云主机之后，发现无法删除对应的�
 ##  操作
 查看云硬盘状态:  
 
-
-```
-cinder list | grep error
-```
+cinder list | grep error  
 
 ![image](/images/openstack_cinder_error_deleting/2.png)
 
@@ -29,9 +26,8 @@ cinder list | grep error
 
 
 
-```
-cinder delete XXX
-```
+cinder delete XXX  
+
 
 
 ```
@@ -50,21 +46,20 @@ ERROR: Unable to delete any of the specified volumes.
 
 
 
-```
+
 show databases;  
-```
+
 
 ![image](/images/openstack_cinder_error_deleting/5.png)  
 
 
-```
 use cinder;  
-```
 
 
-```
+
+
 show tables;  
-```
+
 
 ![image](/images/openstack_cinder_error_deleting/6.png)
 
