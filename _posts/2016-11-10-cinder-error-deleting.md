@@ -12,8 +12,11 @@ Openstack Mitaka版本，终止了云主机之后，发现无法删除对应的�
 ![image](/images/openstack_cinder_error_deleting/1.png)
 
 ## 思路  
-切换至admin用户，进入数据库手动更新云硬盘的状态至错误状态
 
+1 切换至admin用户，进入数据库手动更新云硬盘的状态至错误状态  
+2 针对lvm，可以用命令lvdisplay列出所有卷的信息，如果现在应用命令lvremove来删除相应的卷，则会提示要删除的卷正在使用中，所以我们使用命令lsof查看相应卷所占用的进程，然后kill这个进程；  
+3 应用命令lvremove来删除相应的卷.  
+这里只针对第一种方法实践  
 ##  操作
 查看云硬盘状态:  
 
