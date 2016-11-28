@@ -7,34 +7,38 @@ categories: [OpenStack]
 ---
 
 
-## 问题
+## 问题  
+
 Openstack Mitaka版本，终止了云主机之后，发现无法删除对应的云硬盘，删除提示报错为云硬盘的状态不是错误或者可用状态
 
 ![image](/images/openstack_cinder_error_deleting/1.png)
 
-## 思路
+## 思路  
+
 切换至admin用户，进入数据库手动更新云硬盘的状态至错误状态
 
 
 ##  操作
 
 
-查看云硬盘状态：  
+查看云硬盘状态:  
+
 ```
-# cinder list |grep error ```
+#cinder list |grep error ```
 
 ![image](/images/openstack_cinder_error_deleting/2.png)
 
 
-命令行删除，提示报错说还有依赖的快照。  
+命令行删除，提示报错说还有依赖的快照  
 
 
 ```
-# cinder delete XXX
+#cinder delete XXX
 ```
 
 ```
-Delete for volume XXX failed: Invalid volume: Volume still has 1 dependent snapshots. (HTTP 400) (Request-ID: req-5ba025fb-5a61-422b-b00a-556e19083bd5)
+Delete for volume XXX failed: Invalid volume: Volume still has 1 dependent snapshots. (HTTP 400) 
+(Request-ID: req-5ba025fb-5a61-422b-b00a-556e19083bd5)
 ERROR: Unable to delete any of the specified volumes.
 ```
 
@@ -44,23 +48,24 @@ ERROR: Unable to delete any of the specified volumes.
 
 方法有很多，这里介绍一种简单的。采取暴力手段，进入元数据库。  
 
-![image](/images/openstack_cinder_error_deleting/4.png)
+![image](/images/openstack_cinder_error_deleting/4.png)  
 
-
-```
-show databases;
-```
-
-![image](/images/openstack_cinder_error_deleting/5.png)
 
 
 ```
-use cinder;
+show databases;  
+```
+
+![image](/images/openstack_cinder_error_deleting/5.png)  
+
+
+```
+use cinder;  
 ```
 
 
 ```
-show tables;
+show tables;  
 ```
 
 ![image](/images/openstack_cinder_error_deleting/6.png)
