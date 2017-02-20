@@ -6,7 +6,9 @@ tags: [OpenStack]
 categories: [SDN]
 ---
 
-##背景介绍
+
+
+##背景介绍  
 
 
 OpenFlow中的信息有很多种，以of13_msg_features_request为例，  
@@ -166,7 +168,10 @@ void init_header(struct ofp_header *p_header,UINT1 of_version, UINT1 type, UINT2
 }
 ```
 
-##细节改动：
+
+##  细节改动:  
+
+
 在common.h中加入  
 创建一个msgbuf给每个消息10K的大小的一个buffer，并初始化  
 
