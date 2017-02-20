@@ -2,7 +2,7 @@
 layout: post
 title: SDN控制器代码重构（一）---消息进来存的buffer和sw解耦
 description: "SDN控制器代码重构（一）---消息进来存的buffer和sw解耦"
-tags: [OpenStack]
+tags: [SDN]
 categories: [SDN]
 ---
 
