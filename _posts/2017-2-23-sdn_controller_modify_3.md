@@ -14,14 +14,20 @@ memory_pool原来的架构是
 //内存池结构体
 typedef struct _Queue_List      
 {
-    UINT4       total_len;   //内存池总共的单元个数
-    UINT4       usable_len;  //内存池可用的单元个数
-    void        *data;	      //内存池数据区
-    void        **arr;		  //内存池存储数据区各区块头指针的一个数组(该内存池是向上增长的)
-    UINT4       head;		  //内存池数据区头指针索引(该内存池是向上增长的)即当前未使用的区块头指针的索引
+    UINT4       total_len;   
+    //内存池总共的单元个数
+    UINT4       usable_len;  
+    //内存池可用的单元个数
+    void        *data;	      
+    //内存池数据区
+    void        **arr;		  
+    //内存池存储数据区各区块头指针的一个数组(该内存池是向上增长的)
+    UINT4       head;		  
+    //内存池数据区头指针索引(该内存池是向上增长的)即当前未使用的区块头指针的索引
     UINT4       tail;
     void        *mutex;
-    char        *states;     //防止重复释放,1:没有占用  0:已经占用
+    char        *states;     
+    //防止重复释放,1:没有占用  0:已经占用
     UINT2       block;
 }Queue_List;
 
