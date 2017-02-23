@@ -220,9 +220,9 @@ UINT4 mem_num(void *_pool)              //可用节点的个数
 
 再对这个缓冲区的write的场景进行分类讨论，对不同的初始情况进行讨论，如buffer已经是中间写过了，或者是两边写过了的情况。对进来的包也需要进行分类讨论，对包长超过末端的时候，需要把包分段，把写不下的包写在缓冲区的头部，在整个过程中需要保持header指针的位置是正确的
 
-![photo](/images/sdn_controller_3/1.png)
+![photo](/images/sdn_controller_3/1.jpg)
 
-![photo](/images/sdn_controller_3/2.png)
+![photo](/images/sdn_controller_3/2.jpg)
 
 ##   READ
 
