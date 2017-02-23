@@ -14,14 +14,14 @@ memory_pool原来的架构是
 //内存池结构体
 typedef struct _Queue_List      
 {
-    UINT4       total_len;          //内存池总共的单元个数
-    UINT4       usable_len;         //内存池可用的单元个数
-    void        *data;				//内存池数据区
-    void        **arr;				//内存池存储数据区各区块头指针的一个数组(该内存池是向上增长的)
-    UINT4       head;				//内存池数据区头指针索引(该内存池是向上增长的)即当前未使用的区块头指针的索引
+    UINT4       total_len;   //内存池总共的单元个数
+    UINT4       usable_len;  //内存池可用的单元个数
+    void        *data;	      //内存池数据区
+    void        **arr;		  //内存池存储数据区各区块头指针的一个数组(该内存池是向上增长的)
+    UINT4       head;		  //内存池数据区头指针索引(该内存池是向上增长的)即当前未使用的区块头指针的索引
     UINT4       tail;
     void        *mutex;
-    char        *states;            //防止重复释放,1:没有占用  0:已经占用
+    char        *states;     //防止重复释放,1:没有占用  0:已经占用
     UINT2       block;
 }Queue_List;
 
@@ -108,8 +108,8 @@ static void *Queue_Out(void *_q_list)
         {//by:yhy 可用数量大于0
             head = q_list->head;
             unit = q_list->arr[head];
-            pos = (unit - q_list->data)  /  q_list->block;          //确定节点地址
-            *(q_list->states + pos) = 0;                            //没有占用
+            pos = (unit - q_list->data)  /  q_list->block;    //确定节点地址
+            *(q_list->states + pos) = 0;                      //没有占用
             q_list->usable_len--;
             q_list->head = (head+1)%q_list->total_len;
 			//by:yhy  清零初始化
@@ -180,7 +180,7 @@ void *mem_get(void *pool)
     data = Queue_Out(pool);
     return data;
 }
-//此处的free操作其实就是把已经利用结束的内存区域还给内存池.供以后需要再利用时通过mem_get获得.这也是为什么mem_get时需要清零的原因
+//此处的free操作其实就是把已经利用结束的内存区域还给内存池.供以后需要再利用时通过mem_get获得  这也是为什么mem_get时需要清零的原因
 int mem_free(void *pool ,void *data)    //禁止同一内存释放两次
 {
     return Queue_In(pool , data);
@@ -257,7 +257,7 @@ loop_buffer_t *init_loop_buffer(INT4 len)
 	p_loop_buffer = (loop_buffer_t *)gn_malloc(sizeof(loop_buffer_t));
 	if(NULL== p_loop_buffer)
 	{
-		LOG_PROC("ERROR", "init_loop_buffer -- p_loop_buffer gn_malloc  Finall return GN_ERR");
+		LOG_PROC("ERROR", "init_loop_buffer -- p_loop_buffer gn_malloc  Final return GN_ERR");
 		return NULL;
 	}
 
