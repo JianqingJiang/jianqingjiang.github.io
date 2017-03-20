@@ -21,7 +21,8 @@ linux   /vmlinuz-4.4.0-66-generic root=/dev/mapper/m4--u1604--vg-root ro  iommu=
 cat /proc/cmdline显示如下：  
 ![image](/images/openvswitch-dpdk/1.jpg)
 
-2.hugepage的显示如下
+2.hugepage的显示如下  
+
 ![image](/images/openvswitch-dpdk/2.jpg)
 
 3.hugepage的该路径里面只有2048K这个目录
