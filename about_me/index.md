@@ -19,6 +19,9 @@ Email:jqjiang.1@gmail.com
 
 # Education background
 
+* ###  East China Normal University(2017-2020)  
+*  M.S Software Engineering
+
 * ###  Wenzhou University(2012-2016)  
 *  B.E Network Engineering
   
@@ -93,6 +96,9 @@ Email:jqjiang.1@gmail.com
 ---
 
 # 教育背景
+
+* ###  华东师范大学(2017-2020) 
+*  软件工程
 
 * ###  温州大学(2012-2016)  
 *  网络工程
