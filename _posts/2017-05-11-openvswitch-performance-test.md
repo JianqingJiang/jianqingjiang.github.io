@@ -2,8 +2,8 @@
 layout: post
 title: OpenvSwitch Performance Test
 description: "Openv Switch Performance Test"
-tags: [SDN]
-categories: [SDN]
+tags: [OpenvSwitch]
+categories: [OpenvSwitch]
 ---
 
 ##  实验环境：
