@@ -49,10 +49,12 @@ opendaylight-user@root>
 ```
 
 临时关闭防火墙和selinux
+
 ```
 setenforce 0
 systemctl stop firewalld
 ```
+
 安装完成之后可以使用下列命令在任意节点获取到ODL上面的对接OpenStack API的信息：
 
 <pre><code>
