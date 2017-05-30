@@ -11,8 +11,8 @@ categories: [SDN]
 
 ###  实验环境：
 系统：CentOS7
-OpenStack：Mitaka Stable版本，一台物理机起controller+network+compute ，一台物理机起compute
-ODL:Opendaylight Boron（硼）-SR3版本,部署在单独的物理机
+OpenStack：Mitaka Stable版本，一台物理机起controller+network+compute ，一台物理机起compute  
+ODL:Opendaylight Boron（硼）-SR3版本,部署在单独的物理机  
 
 
 ### 安装OpenStack:
@@ -24,12 +24,13 @@ https://docs.openstack.org/mitaka/install-guide-rdo/
 http://www.sdnlab.com/1931.html
 上面的链接文档还是可以借鉴，需要先安装JDK版本，我安装了1.8版本，设置完环境变量之后就可以使用ODL了
 
-```
+<pre><code>
 # unzip distribution-karaf-0.5.3-Boron-SR3.zip
 # cd distribution-karaf-0.5.3-Boron-SR3/
 # cd bin
 # ./karaf
-```
+</code></pre>
+
 硼版本已经不会有"线程异常且No route to host错误"这个问题了
 在ODL shell中, 需要按照顺序安装下列的features:
 
@@ -53,16 +54,20 @@ setenforce 0
 systemctl stop firewalld
 ```
 安装完成之后可以使用下列命令在任意节点获取到ODL上面的对接OpenStack API的信息：
-```
+
+<pre><code>
 openstack@controller:~$ curl -u admin:admin http://192.168.51.110:8080/controller/nb/v2/neutron/networks
 {
    "networks" : [ ]
 }openstack@controller:~$
-```
-到这里ODL上设置就基本完成了
-注意：请按照一定的顺序安装，安装顺序不合理的话，会导致后面Web界面无法访问！且记录遇到的一个问题：在没有按照顺序安装组件的情况下，无法登录进入ODL主界面。解决方法是通过logout退出karaf平台，进入bin目录：cd bin，执行./karaf clean，再次重复上面的安装组件操作。
+</code></pre>
 
-###OpenStack对接ODL
+到这里ODL上设置就基本完成了  
+注意：请按照一定的顺序安装，安装顺序不合理的话，会导致后面Web界面无法访问！且记录遇到的一个问题：在没有按照顺序安装组件的情况下，无法登录进入ODL主界面。解决方法是通过logout退出karaf平台，进入bin目录：cd bin，执行./karaf clean，再次重复上面的安装组件操作。  
+
+
+###OpenStack对接ODL  
+
 ### 清理OpenStack环境：
 使用下列命令关闭neutron-server
 ```
@@ -135,8 +140,9 @@ username = admin
 url = http://192.168.51.110:8080/controller/nb/v2/neutron
 ```
 
-在OpenStack Controller节点重新配置数据库
-```
+在OpenStack Controller节点重新配置数据库  
+
+<pre><code>
 openstack@controller:~$ source ./admin_openrc.sh 
 openstack@controller:~$ mysql -u root -pmysqlpassword
 MariaDB [(none)]> DROP DATABASE neutron;
@@ -156,7 +162,7 @@ Bye
 openstack@controller:$ rm -rf /etc/neutron/plugin.ini
 openstack@controller:$ ln -s /etc/neutron/plugins/ml2/ml2_conf.ini /etc/neutron/plugin.ini
 openstack@controller:$ su -s /bin/sh -c "neutron-db-manage --config-file /etc/neutron/neutron.conf --config-file /etc/neutron/plugins/ml2/ml2_conf.ini upgrade head" neutron
-```
+</code></pre>
 
 ### 安装networking-odl
 ODL现在已经不用在ml2文件下放入一个python脚本了，目前搞了一个专门的项目叫netwoking-odl，安装一下然后改下配置就可以了。从最新的Neutron代码中，已经发现了诸如原来的opendaylight和其他一些sdn Plugin，已经开始从项目中移除，统一命名为诸如networking-xxxx之类的独立项目。
@@ -171,7 +177,7 @@ openstack@controller:$ cd networking-odl/
 openstack@controller:$ ./setup.py
 ```
 文档说明安装完成之后才可以启动neutron-server,否则会出现如下的报错，说明OpenStack找不到ODL插件
-```
+<pre><code>
 2017-05-26 22:57:27.434 5518 INFO neutron.common.config [-] Logging enabled!
 2017-05-26 22:57:27.435 5518 INFO neutron.common.config [-] /usr/bin/neutron-server version 8.3.0
 2017-05-26 22:57:27.436 5518 INFO neutron.common.config [-] Logging enabled!
@@ -198,18 +204,17 @@ openstack@controller:$ ./setup.py
 2017-05-26 22:57:27.768 5518 ERROR stevedore.extension   File "/usr/lib/python2.7/site-packages/pkg_resources/__init__.py", line 2235, in resolve
 2017-05-26 22:57:27.768 5518 ERROR stevedore.extension     module = __import__(self.module_name, fromlist=['__name__'], level=0)
 2017-05-26 22:57:27.768 5518 ERROR stevedore.extension ImportError: No module named opendaylight.driver
-```
-但是我在CentOS7下安装完了之后还是有上述报错，neutron-server依然起不来
-我的默认的ml2 plugins像openvswitch是安装下如下路径下的/usr/lib/python2.7/site-packages/neutron/plugins/ml2/drivers/openvswitch/
-而且我的networking_odl安装包已经安装在如下路径下/usr/lib/python2.7/site-packages/networking_odl/ml2/
-谷歌了几天之后，得出以下解决方案
-我需要把
-/usr/lib/python2.7/site-packages/networking_odl-2.0.1.dev15-py2.7.egg-info/entry_points.txt
-里面的内容合并到
-/usr/lib/python2.7/site-packages/neutron-8.3.0-py2.7.egg-info/entry_points.txt
-中，终于neutron-server停止抱怨了
-合并完成的entry_points.txt如下
-```
+</code></pre>
+
+但是我在CentOS7下安装完了之后还是有上述报错，neutron-server依然起不来  
+我的默认的ml2 plugins像openvswitch是安装下如下路径下的/usr/lib/python2.7/site-packages/neutron/plugins/ml2/drivers/openvswitch/  
+而且我的networking_odl安装包已经安装在如下路径下/usr/lib/python2.7/site-packages/networking_odl/ml2/  
+谷歌了几天之后，得出以下解决方案  
+我需要把/usr/lib/python2.7/site-packages/networking_odl-2.0.1.dev15-py2.7.egg-info/entry_points.txt  
+里面的内容合并到/usr/lib/python2.7/site-packages/neutron-8.3.0-py2.7.egg-info/entry_points.txt中，终于neutron-server停止抱怨了  
+合并完成的entry_points.txt如下  
+
+<pre><code>
 [neutron.ml2.mechanism_drivers]
 opendaylight = networking_odl.ml2.mech_driver:OpenDaylightMechanismDriver
 opendaylight_v2 = networking_odl.ml2.mech_driver_v2:OpenDaylightMechanismDriver
@@ -221,7 +226,7 @@ macvtap = neutron.plugins.ml2.drivers.macvtap.mech_driver.mech_macvtap:MacvtapMe
 openvswitch = neutron.plugins.ml2.drivers.openvswitch.mech_driver.mech_openvswitch:OpenvswitchMechanismDriver
 sriovnicswitch = neutron.plugins.ml2.drivers.mech_sriov.mech_driver.mech_driver:SriovNicSwitchMechanismDriver
 test = neutron.tests.unit.plugins.ml2.drivers.mechanism_test:TestMechanismDriver
-```
+</code></pre>
 
 ### 验证
 
@@ -251,6 +256,6 @@ OpenStack与ODL安装至此就成功了。
 
 
 参考文档
-https://docs.openstack.org/developer/networking-odl/installation.html
-https://wiki.opendaylight.org/view/OpenStack_and_OpenDaylight
+https://docs.openstack.org/developer/networking-odl/installation.html  
+https://wiki.opendaylight.org/view/OpenStack_and_OpenDaylight  
 http://docs.opendaylight.org/en/stable-boron/submodules/netvirt/docs/openstack-guide/openstack-with-netvirt.html#installing-opendaylight-on-an-existing-openstack
