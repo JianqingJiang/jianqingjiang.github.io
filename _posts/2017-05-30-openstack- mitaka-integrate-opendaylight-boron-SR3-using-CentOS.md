@@ -233,7 +233,8 @@ test = neutron.tests.unit.plugins.ml2.drivers.mechanism_test:TestMechanismDriver
 ### 验证
 
 在OpenStack中创建网络后，执行下面命令
-```
+
+<pre><code>
 [root@controller ~]#  curl -u admin:admin http://192.168.51.110:8080/controller/nb/v2/neutron/networks
 {
    "networks" : [ {
@@ -249,7 +250,8 @@ test = neutron.tests.unit.plugins.ml2.drivers.mechanism_test:TestMechanismDriver
       "segments" : [ ]
    } ]
 }[root@controller ~]#
-```
+</code></pre>
+
 ODL已经可以获取到网络信息
 创建2台虚机，可以成功获取到IP地址，并且可以相互访问
 ![image](/images/openstack_integrate_odl/2.png)
