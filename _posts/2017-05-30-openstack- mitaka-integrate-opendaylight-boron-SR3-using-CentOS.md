@@ -50,10 +50,10 @@ opendaylight-user@root>
 
 临时关闭防火墙和selinux
 
-```
+<pre><code>
 setenforce 0
 systemctl stop firewalld
-```
+</code></pre>
 
 安装完成之后可以使用下列命令在任意节点获取到ODL上面的对接OpenStack API的信息：
 
@@ -68,7 +68,7 @@ openstack@controller:~$ curl -u admin:admin http://192.168.51.110:8080/controlle
 注意：请按照一定的顺序安装，安装顺序不合理的话，会导致后面Web界面无法访问！且记录遇到的一个问题：在没有按照顺序安装组件的情况下，无法登录进入ODL主界面。解决方法是通过logout退出karaf平台，进入bin目录：cd bin，执行./karaf clean，再次重复上面的安装组件操作。  
 
 
-###OpenStack对接ODL  
+###  OpenStack对接ODL  
 
 ### 清理OpenStack环境：
 使用下列命令关闭neutron-server
