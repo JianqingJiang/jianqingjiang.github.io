@@ -15,7 +15,7 @@ https://github.com/openstack/networking-odl
 
 OpenStack networking-odl是一个二进制文件的一个plugin，它的作用是集成OpenStack的Neutron API和OpenDaylight SDN控制器。networking-odl有ML2 driver和L3 plugin的模块，可以支持OpenStack Neutron L2和L3的API，再转发数据到OpenDaylight控制器上
 
-##ODL驱动架构v1
+##   ODL驱动架构v1
 
 ODL-Networking分为v1 driver和v2 driver
 v1 driver会把OpenStack上的网络的更改同步到ODL控制器上。举个例子来说，用户创建了一个网络，首先这个操作会被写进OpenStack的数据库中，然后ODL driver会发送一个POST请求到ODL控制器  
@@ -30,7 +30,7 @@ v1 driver会把OpenStack上的网络的更改同步到ODL控制器上。举个�
 2.在前面的“full sync”的操作的时候，这个时候数据库如果正在删除资源，那么这个时候同步的话，会把下一时刻会被删除的资源，同步到odl这边，形成openstack和odl的资源不同步
 
 
-##ODL驱动架构v2
+##    ODL驱动架构v2
 面对前面的这些问题，社区又重新设计了v2 driver  
 
 * v2 driver最重要的机制是引入了journaling（记录）机制，v2 driver会把openstack传给open daylight的数据记录在一个journal表中，journal表使用一堆队列来构成的。而不是直接把openstack的数据传递给odl  
@@ -58,8 +58,7 @@ https://blueprints.launchpad.net/networking-odl/+spec/dep-validations-on-create
 * 一个entry可能会被反复进行依赖检查，导致CPU浪费
 * 过多地检查依赖关系的话会导致数据库压力剧增
 
-因此，Entry依赖检查机制将会被提前到entry创建的时候就进行，在entry被创建的时候，journal就会检查这个entry是否有依赖其他的entry，如果有的话，那么把这个entry放在一个链表中  
-这样的话，journal在选择entry的时候就会只去选择没有其他依赖的entry，当entry被处理后，无论是成功还是失败，依赖这个entry的链表都会被清空，这样可以使得后面的entry不会依赖到它  
+因此，Entry依赖检查机制将会被提前到entry创建的时候就进行，在entry被创建的时候，journal就会检查这个entry是否有依赖其他的entry，如果有的话，那么把这个entry放在一个链表中。这样的话，journal在选择entry的时候就会只去选择没有其他依赖的entry，当entry被处理后，无论是成功还是失败，依赖这个entry的链表都会被清空，这样可以使得后面的entry不会依赖到它。  
 下面是journal依赖的表，一个entry如果有依赖的话，那么下面的表中的行列就是这个entry的外键，entry被删除的时候，这些外键也需要被同时删除。entry在被处理的时候，这个entry所依赖的parent被存入parent_id中，依赖这个entry的被存入dependent_id中，在journal处理这个entry的时候，必须要保证这个entry没有与parent有依赖关系（当parent被处理完之后会自动断开所有依赖），这样的话就保证了不会存在parent没处理完，而直接去处理这个entry的情况。  
 
 ```
@@ -149,5 +148,5 @@ v2的driver相比以前只有一个python文件来说，代码量大了许多，
 
 
 
-##参考文献
+##   参考文献
 https://docs.openstack.org/developer/networking-odl/
