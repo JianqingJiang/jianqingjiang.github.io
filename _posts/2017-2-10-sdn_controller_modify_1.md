@@ -22,7 +22,8 @@ pthread_create(&(sw->pid_proc), NULL, msg_proc_thread, (void *)&(sw->index));
 
 这个是交换机中定义的结构体  
 
-```
+<pre><code>
+
 typedef struct gn_switch
 {
     UINT1 ofp_version;
@@ -65,7 +66,7 @@ typedef struct gn_switch
     UINT1 sock_state;     //socket status  判断当前线程是否拥有操作的权利"0"有效
     pthread_mutex_t sock_state_mutex;
 }gn_switch_t;
-```
+</code></pre>
 
 但是在每个包的处理过程中，会占用sw结构体中的buffer，并且每个包在存的时候都会加锁  
 
@@ -82,7 +83,7 @@ static INT4 of13_msg_features_request(gn_switch_t *sw, UINT1 *fea_req)
 
 这个是init_sendbuff的函数，把header中的数据写到sw结构中的buffer中  
 
-```
+<pre><code>
 //初始化发送缓存
 UINT1 *init_sendbuff(gn_switch_t *sw, UINT1 of_version, UINT1 type, UINT2 buf_len, UINT4 transaction_id)
 {
@@ -119,7 +120,7 @@ UINT1 *init_sendbuff(gn_switch_t *sw, UINT1 of_version, UINT1 type, UINT2 buf_le
 
     return b;
 }
-```
+</code></pre>
 
 这个是send_of_msg函数，把消息的total_len加上去，然后解锁，最后通过交换机的发送线程发送
 //发送openflow消息(解锁switch的发送缓存,具体发送在发送线程中执行)  
@@ -151,7 +152,7 @@ static INT4 of13_msg_features_request(gn_switch_t *sw, UINT1 *fea_req)
 
 重构init_header，把header中的数据封装  
 
-```
+<pre><code>
 void init_header(struct ofp_header *p_header,UINT1 of_version, UINT1 type, UINT2 len, UINT4 transaction_id)
 {
 	p_header->version = of_version;
@@ -166,7 +167,7 @@ void init_header(struct ofp_header *p_header,UINT1 of_version, UINT1 type, UINT2
         p_header->xid = random_uint32();
     }
 }
-```
+</code></pre>
 
 
 ##  细节改动:  
@@ -186,10 +187,10 @@ void init_header(struct ofp_header *p_header,UINT1 of_version, UINT1 type, UINT2
 
 在conn-svr.h中加入  
 
-```
+<pre><code>
 INT4 send_packet(gn_switch_t *sw, INT1* pBuf, UINT4 nLen);
 void init_header(struct ofp_header *p_header,UINT1 of_version, UINT1 type, UINT2 len, UINT4 transaction_id);
-```
+</code></pre>
 
 在conn-svr.c中加入  
 直接将msgbuffer扔给sw_buffer处理  
