@@ -183,9 +183,9 @@ if(!row.containsKey(COLUMN_POLID) || !row.containsKey(COLUMN_SW)
 || !row.containsKey(COLUMN_QUEUE)//获取队列ID
 || !row.containsKey(COLUMN_ENQPORT)//获取端口 
 || !row.containsKey(COLUMN_SERVICE)){
-        			logger.error("Skipping entry with required fields {}", row);
-        			//获取服务类型
-        			continue;
+      logger.error("Skipping entry with required fields {}", row);
+      //获取服务类型
+      continue;
         		}
 ```
 

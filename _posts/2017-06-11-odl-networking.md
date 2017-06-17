@@ -145,6 +145,58 @@ BP的实现可以分为两个部分，第一个部分，当我们检查到entry�
 v2的driver相比以前只有一个python文件来说，代码量大了许多，主要内容在networking_odl目录下  
 其中bgpvpn,fwaas,lbaas,qos,sfc这几个高级功能都是针对ODL的北向接口开发的，因此参考意义不大。主要的内容还是journal机制的实现以及l2和l3的实现  
 
+```
+L2_RESOURCES = {ODL_SG: ODL_SGS,
+                ODL_SG_RULE: ODL_SG_RULES,
+                ODL_NETWORK: ODL_NETWORKS,
+                ODL_SUBNET: ODL_SUBNETS,
+                ODL_PORT: ODL_PORTS}
+L3_RESOURCES = {ODL_ROUTER: ODL_ROUTERS,
+                ODL_FLOATINGIP: ODL_FLOATINGIPS}
+```
+
+在判断pending还是processing的时候，通过session.query去数据库中查找  
+
+```
+def check_for_pending_or_processing_ops(session, object_uuid, seqnum=None,
+                                        operation=None):
+    q = session.query(models.OpendaylightJournal).filter(
+        or_(models.OpendaylightJournal.state == odl_const.PENDING,
+            models.OpendaylightJournal.state == odl_const.PROCESSING),
+        models.OpendaylightJournal.object_uuid == object_uuid)
+
+    if seqnum is not None:
+        q = q.filter(models.OpendaylightJournal.seqnum < seqnum)
+
+    if operation:
+        if isinstance(operation, (list, tuple)):
+            q = q.filter(models.OpendaylightJournal.operation.in_(operation))
+        else:
+            q = q.filter(models.OpendaylightJournal.operation == operation)
+    return session.query(q.exists()).scalar()
+```
+
+上述的2个机制分别位于2个类中，实现了描述的功能  
+Journal Entry架构：class OpendaylightJournalThread(object):  
+Entry恢复机制：class MaintenanceThread(object):  
+而L2和L3	的转发分别位于以下2个类中：  
+
+```
+class OpenDaylightL2gwDriver(service_drivers.L2gwDriver):
+
+class OpenDaylightL3RouterPlugin(
+        common_db_mixin.CommonDbMixin,
+        extraroute_db.ExtraRoute_db_mixin,
+        l3_dvr_db.L3_NAT_with_dvr_db_mixin,
+        l3_gwmode_db.L3_NAT_db_mixin,
+        l3_agentschedulers_db.L3AgentSchedulerDbMixin):
+```
+
+在性能方面，ODL-Networking对对entry做cache缓存，有timeout和value属性，应该会有不小的性能提升  
+class CacheEntry(collections.namedtuple('CacheEntry', ['timeout', 'values'])):  
+为了更好的支持ODL增加的北向接口，ODL-Networking还特定会起一个start_odl_websocket_thread，位于下面的类中  
+class OpendaylightWebsocketClient(object):  
+
 
 
 
