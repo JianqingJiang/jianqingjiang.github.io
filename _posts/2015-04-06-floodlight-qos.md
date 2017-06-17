@@ -186,7 +186,8 @@ if(!row.containsKey(COLUMN_POLID) || !row.containsKey(COLUMN_SW)//获取OVS的ID
         		}
 </code></pre>
 
-###   4.2 CLI指令配置模块实现
+###    4.2 CLI指令配置模块实现  
+
 模块的具体实现将在后续章节进行详细阐述。控制平面上模块间的交互动作如下：  
 （1）CLI 指令配置模块下发管理员的配置指令；  
 （2）QoS 控制器读取指令，通过流表控制程序实现流表管理机制；  
