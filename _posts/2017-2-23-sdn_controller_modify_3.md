@@ -47,7 +47,7 @@ buff_len=20480
 有时候一个字节就浪费20K大小，就比较的浪费内存，以下是代码的实现
 
 
-```
+<pre><code>
 //在_q_list中插入data
 //与其说是将data插入q_list不如说是将data所占空间还给内存池q_list
 static int Queue_In(void *_q_list, void *data)
@@ -213,7 +213,7 @@ UINT4 mem_num(void *_pool)              //可用节点的个数
     pool = (Queue_List *)(_pool);
     return (pool->total_len - pool->usable_len);
 }
-```
+</code></pre>
 
 
 ##   重写
@@ -254,7 +254,7 @@ typedef struct loop_buffer
 ```
 
 
-```
+<pre><code>
 /***********************************************************************/
 //Circle Queue Related start
 loop_buffer_t *init_loop_buffer(INT4 len)
@@ -422,6 +422,6 @@ BOOL buffer_read(loop_buffer_t *p_loop_buffer,char* p_dest,INT4 len,BOOL peek)
 //Circle Queue Related stop
 /***********************************************************************/
 
-```
+</code></pre>
 
 

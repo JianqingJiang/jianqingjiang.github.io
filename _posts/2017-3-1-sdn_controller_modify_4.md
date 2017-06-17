@@ -40,7 +40,7 @@ void *msg_recv_thread(void *index)
 }
 ```
 
-```
+<pre><code>
 //交换机消息接收并存入缓存空间
 void msg_recv(gn_switch_t *sw)
 {
@@ -135,9 +135,9 @@ void msg_recv(gn_switch_t *sw)
 		}
 	}
 }
-```
+</code></pre>
 
-```
+<pre><code>
 //交换机信息处理线程
 void *msg_proc_thread(void *index)
 {
@@ -197,8 +197,8 @@ void *msg_proc_thread(void *index)
     }
     return NULL;
 }
-```
-```
+</code></pre>
+<pre><code>
 void *msg_send_thread(void *index)
 {
 	UINT4 uiMsgType = 0;
@@ -268,5 +268,5 @@ void *msg_send_thread(void *index)
 	}
 	return NULL;
 }
-```
+</code></pre>
 

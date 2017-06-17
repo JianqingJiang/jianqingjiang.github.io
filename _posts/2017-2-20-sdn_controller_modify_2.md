@@ -12,7 +12,7 @@ categories: [SDN]
 
 文章中有两个函数，分别是new switch和free switch，但是对g_server.cur_switch的操作出现了问题，其中g_server.cur_switch这个定义的参数的全局的，那么任何线程都可以访问，以下是这两个函数  
 
-```
+<pre><code>
 //有新的交换机连入则将其初始化入g_server.switches,并发送ofpt_hello
 static INT4 new_switch(UINT4 switch_sock, struct sockaddr_in addr)
 {
@@ -45,9 +45,9 @@ static INT4 new_switch(UINT4 switch_sock, struct sockaddr_in addr)
     return -1;
 }
 
-```
+</code></pre>
 
-```
+<pre><code>
 //释放交换机结构体
 void free_switch(gn_switch_t *sw)
 {
@@ -102,7 +102,7 @@ void free_switch(gn_switch_t *sw)
     }
     memset(sw->users, 0, g_macuser_table.macuser_hsize * sizeof(mac_user_t *));
 }
-```
+</code></pre>
 
 ##  问题
 
@@ -113,7 +113,7 @@ void free_switch(gn_switch_t *sw)
 把g_server.cur_switch--的操作放在清空参数之后，最后才是g_server.cur_switch--的操作，此时new switch才可以进来，避免了以上的问题，并且对g_server.cur_switch这样参数加锁  
 
 
-```
+<pre><code>
 //有新的交换机连入则将其初始化入g_server.switches,并发送ofpt_hello
 static INT4 new_switch(UINT4 switch_sock, struct sockaddr_in addr)
 {
@@ -146,10 +146,9 @@ static INT4 new_switch(UINT4 switch_sock, struct sockaddr_in addr)
     }
     return -1;
 }
+</code></pre>
 
-```
-
-```
+<pre><code>
 //释放交换机结构体
 void free_switch(gn_switch_t *sw)
 {
@@ -206,13 +205,12 @@ void free_switch(gn_switch_t *sw)
 	g_server.cur_switch--;
 	pthread_mutex_unlock(&g_server.cur_switch_mutex);
 }
-
-```
+</code></pre>
 
 在inc/gnflush0type.h中增加
 
 
-```
+<pre><code>
 //控制器自身sever端的配置信息
 typedef struct gn_server
 {
@@ -229,5 +227,4 @@ typedef struct gn_server
     UINT1 state;
     UINT1 pad[3];
 }gn_server_t;
-
-```
+</code></pre>
