@@ -172,7 +172,7 @@ sudo ovs-vsctl -- set port s1-eth1 qos=@defaultqos -- set port s1-eth2 qos=@defa
    （3）保障特定视频流的带宽；  
 
 QoS控制器的QoSPolicy代码:  
- 
+
 <pre><code>
 Map<String, Object> row;
 IResultSet policySet = storageSource  
@@ -193,6 +193,7 @@ if(!row.containsKey(COLUMN_POLID) || !row.containsKey(COLUMN_SW)//获取OVS的ID
 （3）QoS 读取指令，通过查询、配置接口，对底层交换机状态、端口配置、队列配置进行对应的操作。  
  系统转发平面由位于系统的底层，由传输结点组成，因此除了对流经网络的分类业务流进行数据的传输外，还需要对数据流进行流量控制、带宽调整、等操作，而流分类、标记机制由控制器进行控制和管理。  
  以添加一条Queue队列为例：  
+ 
 <pre><code>
  try:
    	cmd = "--controller=%s:%s --type ip --src %s --dst %s --add --name %s" % (c,cprt,src,dest,name)    //*在Linux命令端口加入Queue队列*  
