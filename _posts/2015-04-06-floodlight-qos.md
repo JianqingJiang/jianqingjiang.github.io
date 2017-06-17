@@ -171,8 +171,7 @@ sudo ovs-vsctl -- set port s1-eth1 qos=@defaultqos -- set port s1-eth2 qos=@defa
    （2）保障特定用户、服务或客户端的带宽；  
    （3）保障特定视频流的带宽；  
 QoS控制器的QoSPolicy代码:  
-<pre><code>
-
+```
 Map<String, Object> row;
 IResultSet policySet = storageSource  
 .executeQuery(TABLE_NAME, ColumnNames, null, null );//从strogeSource中读信息 
@@ -183,8 +182,7 @@ if(!row.containsKey(COLUMN_POLID) || !row.containsKey(COLUMN_SW)//获取OVS的ID
         			logger.error("Skipping entry with required fields {}", row);//获取服务类型
         			continue;
         		}
-
-</code></pre>
+```
 
 ###    4.2 CLI指令配置模块实现
 模块的具体实现将在后续章节进行详细阐述。控制平面上模块间的交互动作如下：  
