@@ -178,8 +178,13 @@ IResultSet policySet = storageSource
 for( Iterator<IResultSet> iter = policySet.iterator(); iter.hasNext();){
 row = iter.next().getRow();//遍历信息
 QoSPolicy p = new QoSPolicy();
-if(!row.containsKey(COLUMN_POLID) || !row.containsKey(COLUMN_SW)//获取OVS的ID || !row.containsKey(COLUMN_QUEUE)//获取队列ID || !row.containsKey(COLUMN_ENQPORT)//获取端口 || !row.containsKey(COLUMN_SERVICE)){
-        			logger.error("Skipping entry with required fields {}", row);//获取服务类型
+if(!row.containsKey(COLUMN_POLID) || !row.containsKey(COLUMN_SW)
+//获取OVS的ID 
+|| !row.containsKey(COLUMN_QUEUE)//获取队列ID
+|| !row.containsKey(COLUMN_ENQPORT)//获取端口 
+|| !row.containsKey(COLUMN_SERVICE)){
+        			logger.error("Skipping entry with required fields {}", row);
+        			//获取服务类型
         			continue;
         		}
 ```
