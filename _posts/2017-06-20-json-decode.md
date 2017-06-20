@@ -8,13 +8,11 @@ categories: [Code]
 
 ##  JSON概述 
 
-![image](/images/openvswitch_performance_test/7.png)
 
-
-* JSON： JavaScript 对象表示法（ JavaScript Object Notation） 。是一种轻量级的数据交换格式。 它基于ECMAScript的一个子集。 JSON采用完全独立于语言的文本格式， 但是也使用了类似于C语言家族的习惯（ 包括C、 C++、 C#、 Java、 JavaScript、 Perl、 Python等） 。这些特性使JSON成为理想的数据交换语言。 易于人阅读和编写， 同时也易于机器解析和生成(一般用于提升网络传输速率)。
-* JSON 解析器和 JSON 库支持许多不同的编程语言。 JSON 文本格式在语法上与创建 JavaScript 对象的代码相同。 由于这种相似性， 无需解析器， JavaScript 程序能够使用内建的 eval() 函数， 用 JSON 数据来生成原生的 JavaScript 对象。
-* JSON 是存储和交换文本信息的语法。 类似 XML。 JSON 比 XML 更小、 更快， 更易解析。
-* JSON 具有自我描述性， 语法简洁， 易于理解。
+* JSON： JavaScript 对象表示法（ JavaScript Object Notation） 。是一种轻量级的数据交换格式。 它基于ECMAScript的一个子集。 JSON采用完全独立于语言的文本格式， 但是也使用了类似于C语言家族的习惯（ 包括C、 C++、 C#、 Java、 JavaScript、 Perl、 Python等） 。这些特性使JSON成为理想的数据交换语言。 易于人阅读和编写， 同时也易于机器解析和生成(一般用于提升网络传输速率)
+* JSON 解析器和 JSON 库支持许多不同的编程语言。 JSON 文本格式在语法上与创建 JavaScript 对象的代码相同。 由于这种相似性， 无需解析器， JavaScript 程序能够使用内建的 eval() 函数， 用 JSON 数据来生成原生的 JavaScript 对象
+* JSON 是存储和交换文本信息的语法。 类似 XML。 JSON 比 XML 更小、 更快， 更易解析
+* JSON 具有自我描述性， 语法简洁， 易于理解
 
 
 ##  JSON语法
@@ -22,10 +20,10 @@ categories: [Code]
 
 JSON基于两种结构：
 
-* “名称/值”对的集合（A collection of name/value pairs）。不同的编程语言中，它被理解为对象（object），纪录（record），结构（struct），字（dictionary），哈希表（hashtable），有键列表（keyed list），或者关联数组 （associative array）。
-* 值的有序列表（An ordered list of values）。在大部分语言中，它被实现为数组（array），矢量（vector），列表（list），序列（sequence）。 
+* “名称/值”对的集合（A collection of name/value pairs）,不同的编程语言中，它被理解为对象（object），纪录（record），结构（struct），字（dictionary），哈希表（hashtable），有键列表（keyed list），或者关联数组 （associative array）
+* 值的有序列表（An ordered list of values）,在大部分语言中，它被实现为数组（array），矢量（vector），列表（list），序列（sequence）
 
-JSON的三种语法： 
+JSON的三种语法:
 
 * 键/值对 key:value，用半角冒号分割。 比如 "name":"Faye" 
 * 文档对象 JSON对象写在花括号中，可以包含多个键/值对。比如{ "name":"Faye" ,"address":"北京" }。 
@@ -33,13 +31,13 @@ JSON的三种语法：
 
 ## Json取数
 
-根据OpenStack LB的API进行数据解析,提供的API如下：
+根据OpenStack LB的API进行数据解析,提供的API如下:
 
 ![image](/images/json/1.png)
 
 
 
-实现的代码如下：
+实现的代码如下:
 
 <pre><code>
 INT4 createOpenstackClbaaslistener(char* jsonString, void* param)
