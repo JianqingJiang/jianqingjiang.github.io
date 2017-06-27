@@ -37,7 +37,11 @@ JSON的三种语法:
 
 
 
-实现的代码如下:
+实现的代码如下:  
+
+<pre><code>
+/**The JSON document tree node, which is a basic JSON type**/	typedef struct json_value	{		enum json_value_type type;	/*!< the type of node */		char *text;	/*!< The text stored by the node. It stores UTF-8 strings and is used exclusively by the JSON_STRING and JSON_NUMBER node types */		/* FIFO queue data */		struct json_value *next;	/*!< The pointer pointing to the next element in the FIFO sibling list */		struct json_value *previous;	/*!< The pointer pointing to the previous element in the FIFO sibling list */		struct json_value *parent;	/*!< The pointer pointing to the parent node in the document tree */		struct json_value *child;	/*!< The pointer pointing to the first child node in the document tree */		struct json_value *child_end;	/*!< The pointer pointing to the last child node in the document tree */	} json_t;
+</code></pre>
 
 <pre><code>
 INT4 createOpenstackClbaaslistener(char* jsonString, void* param)
