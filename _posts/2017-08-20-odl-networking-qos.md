@@ -24,7 +24,7 @@ On network nodes:
 
 Add the QoS service to the service_plugins setting in /etc/neutron/neutron.conf. For example:  
 
-```
+<pre><code>
 service_plugins = \
 neutron.services.l3_router.l3_router_plugin.L3RouterPlugin,
 neutron.services.metering.metering_plugin.MeteringPlugin,
@@ -35,25 +35,29 @@ Optionally, set the needed notification_drivers in the [qos] section in /etc/neu
 [qos]
 ...
 notification_drivers = odl-qos
-```
+</code></pre>
 
 ![image](/images/odl-networking-qos/1.png)  
 
 
 In /etc/neutron/plugins/ml2/ml2_conf.ini, add qos to extension_drivers in the [ml2] section. For example:  
 
-```
+
+<pre><code>
 [ml2]
 extension_drivers = port_security, qos
-If the Open vSwitch agent is being used, set extensions to qos in the [agent] section of /etc/neutron/plugins/ml2/openvswitch_agent.ini. For example:
+If the Open vSwitch agent is being used, set extensions to qos in the [agent] section of /etc/neutron/plugins/ml2/openvswitch_agent.ini. For example:  
+
 
 [agent]
 extensions = qos
-```
+</code></pre>
+
 
 On compute nodes:  
 
 In /etc/neutron/plugins/ml2/ml2_conf.ini, add qos to the extensions setting in the [agent] section. For example:  
+
 
 ```
 [agent]
@@ -100,7 +104,7 @@ If tenants are trusted to create their own policies, check the trusted tenants p
 First, create a QoS policy and its bandwidth limit rule:  
 
 
-```
+<pre><code>
 $ neutron qos-policy-create bw-limiter
 
 Created a new policy:
@@ -126,7 +130,7 @@ Created a new bandwidth_limit_rule:
 | max_burst_kbps | 300                                  |
 | max_kbps       | 3000                                 |
 +----------------+--------------------------------------+
-```
+</code></pre>
 
 ###  验证  
 
