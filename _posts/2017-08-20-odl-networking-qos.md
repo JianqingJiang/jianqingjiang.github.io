@@ -6,7 +6,7 @@ tags: [OpenStack]
 categories: [OpenStack]
 ---
 
-###简要：  
+###   简要：  
 
 由于odl-networking中有很多脚本，这个脚本只针对配置qos service  
 
@@ -16,7 +16,7 @@ QoS 被定义为保证某些网络要求像带宽、 延迟、 抖动和可靠�
 
 
 
-### 配置
+###   配置
 
 To enable the service, follow the steps below:  
 
@@ -91,7 +91,7 @@ To enable DSCP marking rule:
 "get_rule_type": "rule:regular_user",
 ```
 
-### 用户操作
+###  用户操作
 
 QoS policies are only created by admins with the default policy.json. Therefore, you should have the cloud operator set them up on behalf of the cloud tenants.  
 
@@ -128,14 +128,14 @@ Created a new bandwidth_limit_rule:
 +----------------+--------------------------------------+
 ```
 
-### 验证  
+###  验证  
 
 抓到了qos操作的rest请求  
 
-![image](/images/odl-networking-qos/2ß.png)
+![image](/images/odl-networking-qos/2.png)
 
 
-### 参考文献：  
+###  参考文献：  
 
 https://docs.openstack.org/mitaka/networking-guide/config-qos.html
 https://docs.openstack.org/networking-odl/ocata/installation.html
