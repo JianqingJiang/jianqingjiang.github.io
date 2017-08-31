@@ -59,10 +59,10 @@ On compute nodes:
 In /etc/neutron/plugins/ml2/ml2_conf.ini, add qos to the extensions setting in the [agent] section. For example:  
 
 
-```
+<pre><code>
 [agent]
 extensions = qos
-```
+</code></pre>
 
 
 
