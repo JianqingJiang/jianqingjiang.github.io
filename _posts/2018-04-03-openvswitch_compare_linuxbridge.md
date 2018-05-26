@@ -8,7 +8,7 @@ categories: [OpenStack]
 
 目前说到虚拟交换机，通常会想到使用Open vSwitch做虚拟交换机，因为支持Open vSwitch的个人和企业都想要有一个开放的模式把他们的服务集成进OpenStack。 Open vSwitch社区做了大量的工作，希望提升Open vSwitch作为最主要虚拟交换机的地位。社区期望Open vSwitch将在软件定义网络（SDN）接管网络时代到来时，提供所有可能最好的交换服务。但是，Open vSwitch的复杂性使用户渴望更简单的网络解决方案，在这过程中需要Linux Bridge这样的简单桥接技术来支持云解决方案。  
 
-但是Open vSwitchh支持者会指出Linux Bridge 缺少可扩展性的隧道模型。Linux Bridge支持GRE隧道，但是并不支持更前沿和扩展性更好的VXLAN模型。因此有这些观点的网络专家们，他们会比较坚定的认为复杂的解决方案比一个简单的解决方案要好。  
+但是Open vSwitchh支持者会指出Linux Bridge 缺少可扩展性的隧道模型。Linuxbridge是二层概念，不能支持GRE的三层隧道技术，vxlan模型是在linux kernel较高版本（3.9以上）才native支持的。因此有这些观点的网络专家们，他们会比较坚定的认为复杂的解决方案比一个简单的解决方案要好。  
 
 当然，Linux Bridge已经发生了变化，也有助于缩小使用Open vSwitch和Linux Bridge的之间的差距，包括添加VXLAN支持隧道技术。但是在更大的网络规模中，Linux Bridge的简单性可能会产生更大的价值。  
 
