@@ -29,7 +29,7 @@ OpenStack（Mitaka版本）高可用部署，三个Network节点（三个L3-agen
 
 ###   测试图表TCP Download/Upload：在并发数从1-22的过程中，下载速度从700Mbits/s下降到100多Mbits/s
 ![10](/images/neutron-l3-performance/10.png)UDP Download/Upload：在并发数5的条件下，UDP的带宽平均值大约为765Mbits/s![11](/images/neutron-l3-performance/11.png)  在发生Restart L3的情况下，由于主备虚拟路由器的切换（master->slave），性能情况与流量直接走master虚拟路由器的性能并没有很大差别
-![12](/images/neutron-l3-performance/12.jpg)  ###  测试数据：Shaker提供有关不同连接测量的最大值，最小值和平均值的统计数据。 在所有最大值中找出最大值和所有最小值中找出最小值，并且在所有平均值中统计最平均的值。 在下表中，列出了这些值。在并发数为1-22的条件下：  
+![12](/images/neutron-l3-performance/12.png)  ###  测试数据：Shaker提供有关不同连接测量的最大值，最小值和平均值的统计数据。 在所有最大值中找出最大值和所有最小值中找出最小值，并且在所有平均值中统计最平均的值。 在下表中，列出了这些值。在并发数为1-22的条件下：  
 
 ![6](/images/neutron-l3-performance/6.jpg)     ![7](/images/neutron-l3-performance/7.jpg)  
 ### 参考文章https://docs.openstack.org/performance-docs/latest/test_plans/neutron_features/l3_ha/plan.html
