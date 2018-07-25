@@ -4,7 +4,8 @@ title: OpenStack octavia简介
 description: "OpenStack octavia简介"
 tags: [OpenStack]
 categories: [OpenStack]
----### 什么是Octavia？Octavia是一款开源的运营商级负载均衡解决方案，旨在与OpenStack配合使用。Octavia出自Neutron LBaaS项目。 当Neutron LBaaS从版本1转移到版本2时，Neutron LBaaS项目发生了一次大的转变。从Liberty版本的OpenStack开始，Octavia已成为Neutron LBaaS版本2的参考实现。  
+---
+### 什么是Octavia？Octavia是一款开源的运营商级负载均衡解决方案，旨在与OpenStack配合使用。Octavia出自Neutron LBaaS项目。 当Neutron LBaaS从版本1转移到版本2时，Neutron LBaaS项目发生了一次大的转变。从Liberty版本的OpenStack开始，Octavia已成为Neutron LBaaS版本2的参考实现。  
 Octavia自kilo版本从neutron lbaas项目中分离出来，通过管理一系列amphora(vm、containers, or bare metal servers)来完成负载均衡的功能。其框架结构也是一个典型的openstack项目框架。api作为项目入口，rpc来作为组内模块之间通信的中介，controller及数据库来保证数据存储及一致性，实现使用driver来保证能够实现兼容性。  
 Octavia通过管理一系列虚拟机，容器或裸机服务器（统称为amphorae）来完成其负载均衡服务的交付，这些服务器可根据需要进行调整。 这种按需水平缩放功能将Octavia与其他负载平衡解决方案区分开来，从而使Octavia真正适合“云端”。  ###  Octavia可以结合哪些OpenStack组件 ？负载均衡对于实现简单或自动交付扩展和可用性至关重要。为了发挥其作用，Octavia使用了其他OpenStack项目：  
 Nova - 用于管理amphorae生命周期并根据需求启动计算资源。  Neutron - 用于amphorae，租户环境和外部网络之间的网络连接。  Barbican - 用于管理TLS证书和凭证。  Keystone - 用于针对Octavia API进行认证，并用于Octavia与其他OpenStack项目进行认证。  Glance - 用于存储amphorae虚拟机映像。  Oslo - 用于Octavia与其他组件之间的通信  Octavia旨在与前面列出的组件进行交互。在设计原则上，我们都通过driver interface来定义这种交互。这样，外部组件可以用功能相同的其他组件进行替换。   建议将Octavia作为独立的负载平衡解决方案运行。 Neutron LBaaS在Queens版本中已弃用，而Octavia则是其替代产品。对于最终用户来说，这种转换应该是相对无缝的，因为Octavia支持Neutron LBaaS v2 API并且具有类似的CLI界面。也可以使用Octavia作为Neutron LBaaS插件。  有关OpenStack Neutron LBaaS弃用的更多信息，请参阅https://wiki.openstack.org/wiki/Neutron/LBaaS/Deprecation。  ###  Octavia架构![1](/images/openstack-octavia/1.png)
